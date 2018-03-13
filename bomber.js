@@ -3,7 +3,7 @@ function Bomber() {
 	this.y = height/2;
 	this.r = 30;
 	this.speed = 7;
-	this.life = 3;
+	this.life = 10;
 	this.gotHit = false;
 	this.inVulnerable = false;
 	this.moves = false;

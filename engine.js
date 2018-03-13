@@ -10,7 +10,7 @@ var explosion;
 
 var enemies = [];
 var enemy_count = 5;
-var tmp_count = 10;
+var tmp_count = 7;
 var enemy_add = 2;
 var gameover = false;
 
