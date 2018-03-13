@@ -11,7 +11,7 @@ var explosion;
 var enemies = [];
 var enemy_count = 5;
 var tmp_count = 10;
-var enemy_add = 5;
+var enemy_add = 2;
 var gameover = false;
 
 var controller = new Object();
