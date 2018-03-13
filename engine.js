@@ -87,17 +87,17 @@ function draw() {
 		textSize(200);
 		textFont("Impact");
 		fill(211, 8, 93);
-		text("GAME OVER", width/4, height/2);
+		text("GAME OVER", width/5, height/2);
 
-		textSize(100);
+		textSize(85);
 		// textFont("Impact");
 		fill('#FEDCD2');
-		text("You reached Level ", width/4 + 50, height/2 + 100);	
-		text(level, width/2 + 350, height/2 + 100);	
+		text("You reached Level ", width/4 + 30, height/2 + 100);	
+		text(level, width/2 + 300, height/2 + 100);	
 		textSize(70);
 		// textFont("Impact");
 		fill('#DCB239');
-		text("Press ENTER to play again", width/4 + 100, height/2 + 170);		
+		text("Press ENTER to play again", width/5 + 100, height/2 + 170);		
 	}
 
 	else {		
@@ -111,9 +111,9 @@ function draw() {
 
 			if (enemies[i].hits(bomber) && !inVulnerable) {
 				inVulnerable = true;
-				setTimeout(makeVulnerable, 3000);
-				bomber.r += 20;
-				bomber.life--;
+				setTimeout(makeVulnerable, 2000);
+				//bomber.r += 20;  //increase the size of bomber radius
+				bomber.life--; //decrease the number of life 
 			}
 		}
 
@@ -123,7 +123,7 @@ function draw() {
 			if (detonated && explosion.hits(bomber) && !inVulnerable) {
 				inVulnerable = true;
 				setTimeout(makeVulnerable, 3000);
-				bomber.r += 20;
+				//bomber.r += 20; //increase bomber size
 				bomber.life--;
 			}
 
@@ -202,8 +202,8 @@ function toggleKey(keyCode, isPressed) {
 		console.log("explodes!");
 		// console.log(explode);
 		// sound.play();
-		var explode = new Audio("res/music/explode.mp3");
-	explode.play();
+		var explode = new Audio("res/music/explode.mp3"); //exploding sound
+	explode.play(); //play the sound 
 	
 		detonated = true;
 		explosion = new Explosion(bomb.x, bomb.y);			
