@@ -27,11 +27,11 @@ var cloud_count = 100;
 var mist = [];
 
 var level = 1;
-
+var wall;
 function setup() {
-	createCanvas(window.innerWidth, window.innerHeight);
+	var myCanvas=createCanvas(window.innerWidth, window.innerHeight);
 	bomber = new Bomber();
-
+    wall=new Wall(level);
 	var sound = new Audio("res/music/bomberman.mp3");
 	sound.play();
 	// sound.pause();
@@ -172,6 +172,7 @@ function draw() {
 			c.show();
 			c.move(level * .5);
 		}
+        wall.show();
 	}
 }
 
