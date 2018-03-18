@@ -1,7 +1,7 @@
 function Bomb(bomber_x, bomber_y) {
 	this.x = bomber_x;
 	this.y = bomber_y;
-	this.r = 10;
+	this.r = 10; //bomb size 
 
 	this.show = function() {
 		noStroke();

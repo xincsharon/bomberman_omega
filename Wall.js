@@ -24,7 +24,7 @@ function Wall() {
             rect(this.x2, this.y2,10,window.height/3);
            
             
-        }else if (level ==2) {
+        }else {
             noStroke();
             fill('#FF0000');
             rect(this.x1, this.y1,10,window.height/3);

@@ -1,11 +1,11 @@
 function Explosion(bomb_x, bomb_y) {
 	this.x = bomb_x;
 	this.y = bomb_y;
-	this.r = 30;
-	this.explosion_radius = 150;
+	this.r = 20;
+	this.explosion_radius = 200; //bomb explode size 
 	this.transparency = 1000;
-	this.fadeout_rate = 10;
-	this.expand_rate = 10;
+	this.fadeout_rate = 10; //bomb fade away speed
+	this.expand_rate = 10; //bomb detonate speed
 
 	this.show = function() {
 		noStroke();

@@ -3,8 +3,8 @@ function Enemy() {
 	this.y = Math.floor(Math.random() * height);
 	this.r = 20;
 	this.angle = 0;
-	this.speed = 4;
-	this.range = 350;
+	this.speed = 2;
+	this.range = 200; //detect range
 
 	this.show = function() {
 		noStroke();
@@ -17,12 +17,15 @@ function Enemy() {
 		var diffy = this.y - bomber.y;
 
 		var hyp = Math.sqrt(diffx*diffx + diffy*diffy);
-
+		
+		//make enemy be aggresive to chase after bomber, if this function is commented, enemy will run in horizontal and not get close to bomber
 		this.angle = -1 * (Math.atan2(diffx, diffy) * (180 / Math.PI) + 90);
-
+		
+		//important function, without this function, game will crush 
 		var dirx = (Math.cos(this.angle * (Math.PI/180))*this.speed);
 		var diry = (Math.sin(this.angle * (Math.PI/180))*this.speed);
-
+		
+		//let the enemy move and chase after bomber 
 		this.x += this.range >= hyp ? dirx : randomBetween(-2, 3);
 		this.y += this.range >= hyp ? diry : randomBetween(-2, 3);
 
