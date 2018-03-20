@@ -1,5 +1,6 @@
 "use strict";
 function Wall() {
+    
     this.x1 = window.innerWidth / 3;
     this.y1 = window.innerHeight / 3;
     
@@ -45,6 +46,14 @@ function Wall() {
         }
             
     }
+    
+//    var touch = false;
+//    if (((bomber.x <= this.x1) || (bomber.x >= (this.x1+5))) && (bomber.y >= this.y1) || (bomber.y <= this.y1 +5) || (bomber.y >= (this.y1*2)))
+//        {
+//            this.touch = false;
+//        }
+//    else 
+//        this.touch = true;
     
     
 }

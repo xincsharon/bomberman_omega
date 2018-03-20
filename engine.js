@@ -28,7 +28,10 @@ var mist = [];
 
 var level = 1;
 var wall;
+
+
 function setup() {
+    
 	var myCanvas=createCanvas(window.innerWidth, window.innerHeight);
 	bomber = new Bomber();
     wall=new Wall(level);
@@ -44,6 +47,7 @@ function init_enemies(e) {
 	for(var i = 0; i < e; i++) {
 		var enemy = new Enemy();
 		enemies.push(enemy);
+        
 	}
 }
 
@@ -226,15 +230,52 @@ function toggleKey(keyCode, isPressed){
 	}
 }
 
+
+
 function handleControls(){
+     
+    //detect when the bomber touch the wall
+    var touchright = false;
+    var touchleft = false;
+    
+    if ((((bomber.x <= wall.x1) || (bomber.x >= (wall.x1+5))) && (bomber.y >= wall.y1) || (bomber.y <= wall.y1 +5) || (bomber.y >= (wall.y1*2))) && (((bomber.x <= wall.x2) || (bomber.x >= (wall.x2+10)))&& (bomber.y >= wall.y1) || (bomber.y <= wall.y2 +5) || (bomber.y >= (wall.y2*2)))){
+        this.touchright = false;
+        }
+        else{
+		this.touchright = true;
+        }
+    
+    
+    if  ((((bomber.x > wall.x1+5) || (bomber.x < wall.x1)) && (bomber.y >= wall.y1) || (bomber.y <= wall.y1 +5) || (bomber.y >= (wall.y1*2))) && (((bomber.x <= wall.x2) || (bomber.x >= (wall.x2+10)))&& (bomber.y >= wall.y1) || (bomber.y <= wall.y2 +5) || (bomber.y >= (wall.y2*2)))){
+        this.touchleft = false;
+        }
+        else{
+		this.touchleft = true;
+        }
+
+    
+    //control the bomber to move left right up down
+    
 	if (controller.up) {
 		bomber.y -= bomber.speed;
 	} if (controller.down) {
 		bomber.y += bomber.speed;
-	} if (controller.right) {
-		bomber.x += bomber.speed;
+	} if (controller.right){
+        if(this.touchright == false){
+        bomber.x += bomber.speed;
+        }
+        else{
+		bomber.x += 0;
+        }
+        
 	} if (controller.left) {
+        
+        if(this.touchleft == false){
 		bomber.x -= bomber.speed;
+        }
+        else{
+        bomber.x -=0;
+        }
 	} 
 	if (bomber.x - bomber.r < 0) {
 		bomber.x = bomber.r;
@@ -248,6 +289,10 @@ function handleControls(){
 	if (bomber.y + bomber.r > height) {
 		bomber.y = height - bomber.r;
 	}
+    
+//    if(bomber.x == width/2){
+//        bomber.x += 0;
+//    }
 }
 
 function makeVulnerable(){

@@ -1,15 +1,30 @@
-function Enemy() {
+function Enemy(imgenemy) {
 	this.x = Math.floor(Math.random() * width);
 	this.y = Math.floor(Math.random() * height);
-	this.r = 20;
+//    if (this.x >= ((wall.x1)-70)) {
+//        do{
+//          this.x = Math.floor(Math.random() * width); 
+//        } while(this.x >= ((wall.x1)-70));
+//    }
+//    
+//    if (this.y == wall.y1 || this.x == wall.y2)
+//        {
+//          this.y = Math.floor(Math.random() * width);  
+//        }
+    
+	this.r = 40;
 	this.angle = 0;
 	this.speed = 2;
 	this.range = 200; //detect range
+    
+    var monsterimg;
+    monsterimg = loadGif("res/images/monster2.gif");
 
 	this.show = function() {
 		noStroke();
-		fill('#DF744A');
-		ellipse(this.x, this.y, this.r, this.r);
+        image(monsterimg, this.x-40, this.y-40, this.r*2, this.r*2);
+//		fill('#DF744A');
+//		ellipse(this.x, this.y, this.r, this.r);
 	}
 
 	this.move = function(bomber) {

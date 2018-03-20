@@ -7,11 +7,16 @@ function Bomber() {
 	this.gotHit = false;
 	this.inVulnerable = false; //make bomberman invisible for a moment
 	this.moves = false;
+    
+    var bomberimage;
+    bombermanimg = loadImage("res/images/bomberman.png")
 
 	this.show = function() {
 		noStroke();
-		fill('#DCB239');
-		ellipse(this.x, this.y, this.r, this.r); //bomber shape, ellipse will automatically draw an oval in the window. reference <http://processingjs.org/reference/ellipse_/>. 
+        image(bombermanimg, this.x-40, this.y-40, 80, 80);
+//		fill('#DCB239');
+//		ellipse(this.x, this.y, this.r, this.r); 
+        //bomber shape, ellipse will automatically draw an oval in the window. reference <http://processingjs.org/reference/ellipse_/>. 
 	}
 
 	this.plant = function() {
