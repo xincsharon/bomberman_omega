@@ -7,6 +7,7 @@ function Bomber() {
 	this.gotHit = false;
 	this.inVulnerable = false; //make bomberman invisible for a moment
 	this.moves = false;
+    this.score = 0;
     
     var bomberimage;
     bombermanimg = loadImage("res/images/bomberman.png")

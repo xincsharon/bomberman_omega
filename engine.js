@@ -36,8 +36,8 @@ function setup() {
 	bomber = new Bomber();
     wall=new Wall(level);
 	var sound = new Audio("res/music/bomberman.mp3");
-	sound.play();
-	// sound.pause();
+	//sound.play();
+	//sound.pause();
 
 	init_enemies(enemy_count);
 	initClouds();
@@ -76,14 +76,17 @@ function draw() {
 	
 	text("Life Remaining: ", 50, 120);
 	text(bomber.life, 250, 120);
+    
+    text("Score: ", 50, 150);
+    text(bomber.score, 150, 150);
 
 
 	if (!bomber.moves) {
 		fill(255)
 		textSize(25);
-		text("Kill all the enemies using your bomb", width/2 - 190, height/2 + 330);
-		text("SPACE/J to plant, C/K to detonate", width/2 - 170, height/2 + 360);
-		text("Use Arrow Keys or W, A, S, D to move", width/2 - 185, height/2 + 390);
+		text("Kill all the enemies using your bomb", width/2 - 190, height/2 + 300);
+		text("SPACE/J to plant, C/K to detonate", width/2 - 170, height/2 + 330);
+		text("Use Arrow Keys or W, A, S, D to move", width/2 - 185, height/2 + 360);
 	}
 
 	if (bomber.life <= 0) {
@@ -109,12 +112,18 @@ function draw() {
 
 		for (var i = 0; i < enemies.length; i++) {
 			enemies[i].show();
+			
+			//enemy detect if bomberman move
 			if (bomber.moves) {
-				enemies[i].move(bomber);				
+				//more enemies will chase after bomberman if he's in the range
+				enemies[i].move(bomber);		
 			}
-
+			
+			//detect if enemy hit bomberman and detect if bomberman is still in inVulnerable state
 			if (enemies[i].hits(bomber) && !inVulnerable) {
+				//after damaging bomberman, he will turn into inVulnerable
 				inVulnerable = true;
+				//bomberman is inVulnerable for 2seconds
 				setTimeout(makeVulnerable, 2000);
 				//bomber.r += 20;  //increase the size of bomber radius
 				bomber.life--; //decrease the number of life 
@@ -135,7 +144,10 @@ function draw() {
 				for (var i = 0; i < enemies.length; i++) {
 					if (explosion.hits(enemies[i])){
 						console.log("hit!");
-						enemies.splice(i, 1);
+						enemies.splice(i, 1); //destroy enemy (i is number of enemy. 1 is set to destroy particular enemy, if set to 0 then no enemy will be destroy)
+                        bomber.score+=50;
+						
+						//if enemy is wipe out, then will calculate the next round of enemies
 						if (enemies.length < 1) {
 							enemy_count = tmp_count;
 							tmp_count += enemy_add;
@@ -178,14 +190,15 @@ function draw() {
 		}
 		
 		bomber.show();	
-		//not sure what is this function for
-		/*for (var c of mist) {
+	
+		//this function is for submitting mist to cloud
+		for (var c of mist) {
 			c.show();
 			c.move(level * .5);
-		}*/
+		}
 		
 		// call the wall function. 
-        wall.show();
+        //wall.show();
 	}
 }
 
@@ -235,7 +248,7 @@ function toggleKey(keyCode, isPressed){
 function handleControls(){
      
     //detect when the bomber touch the wall
-    var touchright = false;
+    /*var touchright = false;
     var touchleft = false;
     
     if ((((bomber.x <= wall.x1) || (bomber.x >= (wall.x1+5))) && (bomber.y >= wall.y1) || (bomber.y <= wall.y1 +5) || (bomber.y >= (wall.y1*2))) && (((bomber.x <= wall.x2) || (bomber.x >= (wall.x2+10)))&& (bomber.y >= wall.y1) || (bomber.y <= wall.y2 +5) || (bomber.y >= (wall.y2*2)))){
@@ -251,7 +264,7 @@ function handleControls(){
         }
         else{
 		this.touchleft = true;
-        }
+        }*/
 
     
     //control the bomber to move left right up down
@@ -261,21 +274,9 @@ function handleControls(){
 	} if (controller.down) {
 		bomber.y += bomber.speed;
 	} if (controller.right){
-        if(this.touchright == false){
-        bomber.x += bomber.speed;
-        }
-        else{
-		bomber.x += 0;
-        }
-        
+        bomber.x += bomber.speed;  
 	} if (controller.left) {
-        
-        if(this.touchleft == false){
-		bomber.x -= bomber.speed;
-        }
-        else{
-        bomber.x -=0;
-        }
+		bomber.x -= bomber.speed;        
 	} 
 	if (bomber.x - bomber.r < 0) {
 		bomber.x = bomber.r;
