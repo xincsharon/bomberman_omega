@@ -34,8 +34,9 @@ function setup() {
     
 	var myCanvas=createCanvas(window.innerWidth, window.innerHeight);
 	bomber = new Bomber();
-    wall=new Wall(level);
+    //wall=new Wall(level);
 	var sound = new Audio("res/music/bomberman.mp3");
+    
 	//sound.play();
 	//sound.pause();
 
