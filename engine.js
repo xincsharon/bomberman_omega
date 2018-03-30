@@ -8,6 +8,12 @@ var has_exploded = false;
 var gone = false;
 var explosion;
 
+var powerUps;
+var powerUp_count = 2;
+var powerUp_add = 0;
+var powerUp_tmp = 2;
+var pUpExist = true;
+
 var enemies = [];
 var enemy_count = 5;
 var tmp_count = 7;
@@ -34,14 +40,18 @@ function setup() {
     
 	var myCanvas=createCanvas(window.innerWidth, window.innerHeight);
 	bomber = new Bomber();
+    powerUps = new powerUp();
     //wall=new Wall(level);
 	var sound = new Audio("res/music/bomberman.mp3");
     
 	//sound.play();
 	//sound.pause();
+    
 
 	init_enemies(enemy_count);
 	initClouds();
+
+
 }
 
 function init_enemies(e) {
@@ -51,6 +61,7 @@ function init_enemies(e) {
         
 	}
 }
+
 
 function draw() {
 
@@ -110,6 +121,25 @@ function draw() {
 
 	else {		
 		handleControls();
+        
+
+            if (pUpExist){
+                powerUps.show();
+                
+            }   // spawns the power up and show in the game
+                        
+            // when the player hits the heart, bomber's life will increase by 1, while  at the same time the heart will be gone.
+            if (powerUps.hits(bomber)){ 
+                
+                bomber.life+=1;
+                powerUps.gone();
+
+                pUpExist = false;
+            }
+            
+            
+            
+        
 
 		for (var i = 0; i < enemies.length; i++) {
 			enemies[i].show();
@@ -147,12 +177,24 @@ function draw() {
 						console.log("hit!");
 						enemies.splice(i, 1); //destroy enemy (i is number of enemy. 1 is set to destroy particular enemy, if set to 0 then no enemy will be destroy)
                         bomber.score+=50;
-						
+				
+                
 						//if enemy is wipe out, then will calculate the next round of enemies
-						if (enemies.length < 1) {
+						if (enemies.length < 1 ) {
 							enemy_count = tmp_count;
 							tmp_count += enemy_add;
 							bomber.moves = false;
+                            
+                            if (pUpExist == false){
+                                    
+                                powerUps.respawn(); // spawns the power up and show in the game
+//                                respawn_powerup();
+                                pUpexist = true;
+                            }
+                            
+                           
+//                            respawn_powerup();
+//                            pUpExist == true;
 
 							setTimeout(init_enemies(enemy_count), 3000);
 							// init_enemies(enemy_count);
@@ -160,9 +202,14 @@ function draw() {
 							for (var j = 0; j < enemies.length; j++) {
 								enemies[j].range += 30; //after each lv, enemy detection range increase 
 								enemies[j].speed += 0.5; //new add on, for enemy speed increase every level.
-							}
+                            }
+                            
+                            
+							
 						}
-					}
+                         
+					
+                    }
 				}
 				
 				//detonate the bomb 
