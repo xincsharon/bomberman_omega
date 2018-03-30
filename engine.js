@@ -34,7 +34,7 @@ var mist = [];
 
 var level = 1;
 var wall;
-
+var forceFieldOn;
 
 function setup() {
     
@@ -43,7 +43,7 @@ function setup() {
     powerUps = new powerUp();
     //wall=new Wall(level);
 	var sound = new Audio("res/music/bomberman.mp3");
-    
+    forceFieldOn = new Audio("res/music/force_field_on.mp3");
 	//sound.play();
 	//sound.pause();
     
@@ -154,6 +154,8 @@ function draw() {
 			if (enemies[i].hits(bomber) && !inVulnerable) {
 				//after damaging bomberman, he will turn into inVulnerable
 				inVulnerable = true;
+                //force field will be up, this is to indicate player force field is up and player loses one live
+                forceFieldOn.play();
 				//bomberman is inVulnerable for 2seconds
 				setTimeout(makeVulnerable, 2000);
 				//bomber.r += 20;  //increase the size of bomber radius
@@ -166,6 +168,8 @@ function draw() {
 
 			if (detonated && explosion.hits(bomber) && !inVulnerable) {
 				inVulnerable = true;
+                //force field will be up, this is to indicate player force field is up and player loses one live
+                forceFieldOn.play();
 				setTimeout(makeVulnerable, 5000);
 				//bomber.r += 20; //increase bomber size
 				bomber.life--;
