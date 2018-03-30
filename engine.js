@@ -191,9 +191,10 @@ function draw() {
                             
                             if (pUpExist == false){
                                     
-                                powerUps.respawn(); // spawns the power up and show in the game
+                                powerUps.respawn(); // checks if there's any life power up from the previous level, if no then spawns a new one.
 //                                respawn_powerup();
-                                pUpexist = true;
+                                
+                                pUpExist = true;
                             }
                             
                            
@@ -203,6 +204,7 @@ function draw() {
 							setTimeout(init_enemies(enemy_count), 3000);
 							// init_enemies(enemy_count);
 							level++;
+                            
 							for (var j = 0; j < enemies.length; j++) {
 								enemies[j].range += 30; //after each lv, enemy detection range increase 
 								enemies[j].speed += 0.5; //new add on, for enemy speed increase every level.
