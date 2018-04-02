@@ -8,15 +8,14 @@ var has_exploded = false;
 var gone = false;
 var explosion;
 
+var pickUp;
 var powerUps;
-var powerUp_count = 2;
-var powerUp_add = 0;
-var powerUp_tmp = 2;
 var pUpExist = true;
 
 var enemies = [];
-var enemy_count = 5;
-var tmp_count = 7;
+var enemy_count = 2;
+var enemy2_count = 0;
+var tmp_count = 4;
 var enemy_add = 2;
 var gameover = false;
 
@@ -41,25 +40,34 @@ function setup() {
 	var myCanvas=createCanvas(window.innerWidth, window.innerHeight);
 	bomber = new Bomber();
     powerUps = new powerUp();
-    //wall=new Wall(level);
+    
 	var sound = new Audio("res/music/bomberman.mp3");
     forceFieldOn = new Audio("res/music/force_field_on.mp3");
+    pickUp = new Audio("res/music/pickup.mp3");
+    
 	//sound.play();
 	//sound.pause();
     
 
-	init_enemies(enemy_count);
+	init_enemies(enemy_count,enemy2_count,level);
 	initClouds();
 
 
 }
 
-function init_enemies(e) {
+function init_enemies(e,e2,current_level) {
 	for(var i = 0; i < e; i++) {
-		var enemy = new Enemy();
-		enemies.push(enemy);
-        
+		var enemy = new Enemy("res/images/monster2.gif",1,40);
+		enemies.push(enemy); 
 	}
+    
+    
+    if(current_level >= 2){
+        for(var i = 0; i < e2; i++) {
+		  var enemy = new Enemy("res/images/monster.gif", 3,65);
+		  enemies.push(enemy); 
+	   }
+    }
 }
 
 
@@ -120,27 +128,20 @@ function draw() {
 	}
 
 	else {		
-		handleControls();
-        
-
+		handleControls();     
+            // spawns the power up and show in the game
             if (pUpExist){
-                powerUps.show();
-                
-            }   // spawns the power up and show in the game
+                powerUps.show();  
+            }   
                         
             // when the player hits the heart, bomber's life will increase by 1, while  at the same time the heart will be gone.
             if (powerUps.hits(bomber)){ 
-                
+                pickUp.play();
                 bomber.life+=1;
                 powerUps.gone();
-
                 pUpExist = false;
             }
             
-            
-            
-        
-
 		for (var i = 0; i < enemies.length; i++) {
 			enemies[i].show();
 			
@@ -179,42 +180,49 @@ function draw() {
 				for (var i = 0; i < enemies.length; i++) {
 					if (explosion.hits(enemies[i])){
 						console.log("hit!");
-						enemies.splice(i, 1); //destroy enemy (i is number of enemy. 1 is set to destroy particular enemy, if set to 0 then no enemy will be destroy)
-                        bomber.score+=50;
+                        
+                        //Make sure that it only run this function once that is to minus 1 life from current enemy
+                        if(!enemies[i].afterHit){
+                            enemies[i].lostLife();
+                            enemies[i].afterHit = true;
+                        }
+                        
+                        //Check if life is less than 1, remove it from enemies array
+                        if(enemies[i].life < 1){
+                            enemies.splice(i,1);
+                        }
+				        
+                        //When hit, add 50 points
+                        bomber.score += 50;
 				
                 
-						//if enemy is wipe out, then will calculate the next round of enemies
+						//If enemy is wipe out, then will calculate the next round of enemies
 						if (enemies.length < 1 ) {
 							enemy_count = tmp_count;
 							tmp_count += enemy_add;
+                            
+                            //Starts increment if level is more than 2 for new enemy
+                            if(level >= 2){
+                                enemy2_count++; 
+                            }
+                            
 							bomber.moves = false;
                             
+                            // checks if there's any life power up from the previous level, if no then spawns a new one.
                             if (pUpExist == false){
-                                    
-                                powerUps.respawn(); // checks if there's any life power up from the previous level, if no then spawns a new one.
-//                                respawn_powerup();
-                                
+                                powerUps.respawn(); 
                                 pUpExist = true;
                             }
                             
-                           
-//                            respawn_powerup();
-//                            pUpExist == true;
+                        setTimeout(init_enemies(enemy_count,enemy2_count,level), 3000);
 
-							setTimeout(init_enemies(enemy_count), 3000);
-							// init_enemies(enemy_count);
 							level++;
                             
 							for (var j = 0; j < enemies.length; j++) {
 								enemies[j].range += 30; //after each lv, enemy detection range increase 
 								enemies[j].speed += 0.5; //new add on, for enemy speed increase every level.
-                            }
-                            
-                            
-							
-						}
-                         
-					
+                            }                           				
+						}		
                     }
 				}
 				
@@ -250,9 +258,6 @@ function draw() {
 			c.show();
 			c.move(level * .5);
 		}
-		
-		// call the wall function. 
-        //wall.show();
 	}
 }
 
@@ -278,6 +283,10 @@ function toggleKey(keyCode, isPressed){
 	if ((keyCode == SPACE || keyCode == 74) && !bomb_flag){
 		bomb_flag = true;
 		bomb = bomber.plant();
+        
+        for(var i=0; i<enemies.length ; i++){
+            enemies[i].afterHit = false;
+        }
 	} 
 	if ((keyCode == C_KEY || keyCode == 75) && (!detonated && bomb_flag)){
 		console.log("explodes!");
@@ -376,12 +385,13 @@ function reset(){
 	detonated = false;
 	has_exploded = false;
 	gone = false;
-	enemy_count = 5;
-	tmp_count = 7;
+	enemy_count = 2;
+    enemy2_count = 0;
+	tmp_count = 4;
 	// console.log(enemy_count);
 	// alert(enemy_count);
 	enemies = [];
-	init_enemies (enemy_count);
+	init_enemies(enemy_count,enemy2_count,level);
 }
 
 function initClouds(){

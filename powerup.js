@@ -3,7 +3,7 @@ function powerUp(heartImg) {
 	this.y = Math.floor(Math.random() * height);
     
     
-
+    
 	this.r = 20;
     this.angle =0;
     
@@ -12,7 +12,7 @@ function powerUp(heartImg) {
     
     this.show = function(){
         noStroke();
-        image(heartImg, this.x-40, this.y-40, this.r*2, this.r*2);
+        image(heartImg, this.x-20, this.y-20, this.r*2, this.r*2);
     }
     
     this.hits = function(powerup){

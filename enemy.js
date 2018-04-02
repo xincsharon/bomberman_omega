@@ -1,28 +1,23 @@
-function Enemy(imgenemy) {
+function Enemy(imgenemy,life_allocated,size) {
 	this.x = Math.floor(Math.random() * width);
-	this.y = Math.floor(Math.random() * height);
-//    if (this.x >= ((wall.x1)-70)) {
-//        do{
-//          this.x = Math.floor(Math.random() * width); 
-//        } while(this.x >= ((wall.x1)-70));
-//    }
-//    
-//    if (this.y == wall.y1 || this.x == wall.y2)
-//        {
-//          this.y = Math.floor(Math.random() * width);  
-//        }
-    
-	this.r = 40;
+	this.y = Math.floor(Math.random() * height);    
+	this.r = size;
 	this.angle = 0;
 	this.speed = 2;
 	this.range = 200; //detect range
+    this.life = life_allocated;
+    this.afterHit = false;
     
     var monsterimg;
-    monsterimg = loadGif("res/images/monster2.gif");
+    monsterimg = loadGif(imgenemy);
 
 	this.show = function() {
 		noStroke();
-        image(monsterimg, this.x-40, this.y-40, this.r*2, this.r*2);
+        if(size == 40){
+            image(monsterimg, this.x-40, this.y-40, this.r*2, this.r*2);
+        }else if(size == 65){
+            image(monsterimg, this.x-60, this.y-60, this.r*2, this.r*2);
+        }
 //		fill('#DF744A');
 //		ellipse(this.x, this.y, this.r, this.r);
 	}
@@ -64,4 +59,8 @@ function Enemy(imgenemy) {
 			return true;
 		} return false;
 	}
+    
+    this.lostLife = function(){
+        this.life = this.life - 1;    
+    }
 }
