@@ -1,6 +1,48 @@
 function Enemy(imgenemy,life_allocated,size) {
-	this.x = Math.floor(Math.random() * width);
-	this.y = Math.floor(Math.random() * height);    
+	var xPos = window.innerWidth-50;
+	var yPos = window.innerHeight-50;
+	
+	console.log(xPos);
+	console.log(yPos);
+	
+	var arrayPosx = [];
+	var arrayPosy = [];
+	var i = 0;
+	
+	for(i = 0; i < window.innerWidth; i++){
+		if((xPos > bomber.x - 10) || (xPos < bomber.x + 10)){
+			arrayPosx[i] = xPos;
+			xPos--;
+		} else {
+			arrayPosx[i] = 200;
+			xPos--;
+		}
+	}
+	
+	for(i = 0; i < window.innerHeight; i++){
+		if((yPos > bomber.y - 10) || (xPos < bomber.y + 10)){
+			arrayPosy[i] = yPos;
+			yPos--;
+		} else {
+			arrayPosy[i] = 200;
+			yPos--;
+		}
+	}
+	
+	console.log(arrayPosx);
+	console.log(arrayPosy);
+	
+	var a = Math.floor(Math.random(arrayPosx) * (width - 100));
+	var b = Math.floor(Math.random(arrayPosy) * (height - 100));
+
+	console.log(a);
+	console.log(b);
+	
+	this.x = arrayPosx[a];
+	this.y = arrayPosy[b];
+	
+	/*this.x = Math.floor(Math.random() * width);
+	this.y = Math.floor(Math.random() * height);*/
 	this.r = size;
 	this.angle = 0;
 	this.speed = 2;
