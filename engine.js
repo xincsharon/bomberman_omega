@@ -1,6 +1,6 @@
 var bomber;
 var inVulnerable = false;
-
+var makeSlow =  false;
 var bomb;
 var bomb_flag = false;
 var detonated = false;
@@ -10,7 +10,10 @@ var explosion;
 
 var pickUp;
 var powerUps;
+var freeze;
+var freezeEffect;
 var pUpExist = true;
+var freezeExist = true;
 
 var enemies = [];
 var enemy_count = 2;
@@ -39,12 +42,13 @@ function setup() {
     
 	var myCanvas=createCanvas(window.innerWidth, window.innerHeight);
 	bomber = new Bomber();
-    powerUps = new powerUp();
+    powerUps = new powerUp("res/images/heartImg.png",20);
+    freeze = new powerUp("res/images/freeze2.png",30);
     
 	var sound = new Audio("res/music/bomberman.mp3");
     forceFieldOn = new Audio("res/music/force_field_on.mp3");
     pickUp = new Audio("res/music/pickup.mp3");
-    
+    freezeEffect = new Audio("res/music/freezeEffect.mp3");
 	//sound.play();
 	//sound.pause();
     
@@ -128,7 +132,26 @@ function draw() {
 	}
 
 	else {		
-		handleControls();     
+		handleControls();
+            
+            if(level >= 3){
+                // Spawns the trap and show in the game    
+                if(freezeExist){
+                    freeze.show();
+                }
+                
+                // Check if trap is activated and execute effect only when bomber is vunerable
+                if(freeze.hits(bomber) && !makeSlow && !inVulnerable){
+                    makeSlow = true;
+                    freezeEffect.play();
+                    bomber.speed = 1;
+                    setTimeout(resetBomberSpeed,1500);
+                    freeze.gone();
+                    freezeExist = false;
+                }
+            }    
+            
+        
             // spawns the power up and show in the game
             if (pUpExist){
                 powerUps.show();  
@@ -214,6 +237,10 @@ function draw() {
                                 pUpExist = true;
                             }
                             
+                            if(freezeExist == false){
+                                freeze.respawn();
+                                freezeExist = true;
+                            }
                         setTimeout(init_enemies(enemy_count,enemy2_count,level), 3000);
 
 							level++;
@@ -361,6 +388,11 @@ function handleControls(){
 
 function makeVulnerable(){
 	inVulnerable = false;
+}
+
+function resetBomberSpeed(){
+    makeSlow = false;
+    bomber.speed = 7;
 }
 
 document.onkeydown = function(evt){

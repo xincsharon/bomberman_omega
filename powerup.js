@@ -1,18 +1,25 @@
-function powerUp(heartImg) {
+function powerUp(x, radius) {
 	this.x = Math.floor(Math.random() * width);
 	this.y = Math.floor(Math.random() * height);
     
     
     
-	this.r = 20;
+	this.makeSlow = false;
+	this.r = radius;
     this.angle =0;
     
-    var heartImg;
-    heartImg = loadImage("res/images/heartImg.png");
+    var powerImg;
+    powerImg = loadImage(x);
     
     this.show = function(){
         noStroke();
-        image(heartImg, this.x-20, this.y-20, this.r*2, this.r*2);
+        if(this.r == 20){
+            image(powerImg, this.x-20, this.y-20, this.r*2, this.r*2);
+        }else if(this.r == 30){
+            image(powerImg, this.x-30, this.y-30, this.r*2, this.r*2);
+        }
+//        		fill('#DCB239');
+//		ellipse(this.x, this.y, this.r, this.r); 
     }
     
     // this is to make sure the player can hit the power up by touching it.
@@ -27,7 +34,7 @@ function powerUp(heartImg) {
     this.respawn = function(){
         this.x = Math.floor(Math.random() * width);
         this.y = Math.floor(Math.random() * height);
-        this.r = 20;
+        this.r = radius;
         
         this.show();
     }
