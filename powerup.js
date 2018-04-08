@@ -2,8 +2,6 @@ function powerUp(x, radius) {
 	this.x = Math.floor(Math.random() * width);
 	this.y = Math.floor(Math.random() * height);
     
-    
-    
 	this.makeSlow = false;
 	this.r = radius;
     this.angle =0;
@@ -17,7 +15,9 @@ function powerUp(x, radius) {
             image(powerImg, this.x-20, this.y-20, this.r*2, this.r*2);
         }else if(this.r == 30){
             image(powerImg, this.x-30, this.y-30, this.r*2, this.r*2);
-        }
+        }else if(this.r == 25){
+			image(powerImg, this.x-25, this.y-25, this.r+15, this.r+20);
+		}
 //        		fill('#DCB239');
 //		ellipse(this.x, this.y, this.r, this.r); 
     }

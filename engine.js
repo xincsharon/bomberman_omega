@@ -1,6 +1,7 @@
 var bomber;
 var inVulnerable = false;
 var makeSlow =  false;
+var makeSpeed = false;
 var bomb;
 var bomb_flag = false;
 var detonated = false;
@@ -14,6 +15,8 @@ var freeze;
 var freezeEffect;
 var pUpExist = true;
 var freezeExist = true;
+var speedUp;
+var speedExist = true;
 
 var enemies = [];
 var enemy_count = 2;
@@ -44,7 +47,8 @@ function setup() {
 	bomber = new Bomber();
     powerUps = new powerUp("res/images/heartImg.png",20);
     freeze = new powerUp("res/images/freeze2.png",30);
-    
+    speedUp = new powerUp("res/images/speed.png",25);
+	
 	var sound = new Audio("res/music/bomberman.mp3");
     forceFieldOn = new Audio("res/music/force_field_on.mp3");
     pickUp = new Audio("res/music/pickup.mp3");
@@ -108,9 +112,9 @@ function draw() {
 	if (!bomber.moves) {
 		fill(255)
 		textSize(25);
-		text("Kill all the enemies using your bomb", width/2 - 190, height/2 + 300);
-		text("SPACE/J to plant, C/K to detonate", width/2 - 170, height/2 + 330);
-		text("Use Arrow Keys or W, A, S, D to move", width/2 - 185, height/2 + 360);
+		text("Kill all the enemies using your bomb", width/2 - 190, height/2 + 280);
+		text("SPACE/J to plant, C/K to detonate", width/2 - 170, height/2 + 310);
+		text("Use Arrow Keys or W, A, S, D to move", width/2 - 185, height/2 + 340);
 	}
 
 	if (bomber.life <= 0) {
@@ -118,17 +122,17 @@ function draw() {
 		textSize(200);
 		textFont("Impact");
 		fill(211, 8, 93);
-		text("GAME OVER", width/5, height/2);
+		text("GAME OVER", width/6 + 30, height/2);
 
 		textSize(85);
 		// textFont("Impact");
 		fill('#FEDCD2');
-		text("You reached Level ", width/4 + 30, height/2 + 100);	
-		text(level, width/2 + 250, height/2 + 100);	
+		text("You reached Level ", width/4 + 10, height/2 + 90);	
+		text(level, width/2 + 270, height/2 + 90);	
 		textSize(70);
 		// textFont("Impact");
 		fill('#DCB239');
-		text("Press ENTER to play again", width/5 + 100, height/2 + 170);		
+		text("Press ENTER to play again", width/5 + 70, height/2 + 170);		
 	}
 
 	else {		
@@ -139,7 +143,7 @@ function draw() {
                 if(freezeExist){
                     freeze.show();
                 }
-                
+				
                 // Check if trap is activated and execute effect only when bomber is vunerable
                 if(freeze.hits(bomber) && !makeSlow && !inVulnerable){
                     makeSlow = true;
@@ -149,8 +153,25 @@ function draw() {
                     freeze.gone();
                     freezeExist = false;
                 }
+				
+				
             }    
             
+			//spawn the speed up in game 
+			if(speedExist){
+				speedUp.show();
+			}
+			
+			//increase bomber speed after they have hit the power up, then it will gone after 
+			if(speedUp.hits(bomber) && !inVulnerable && !makeSlow){
+				makeSpeed = true;
+				pickUp.play();
+				bomber.speed = 10;
+				setTimeout(resetBomberSpeedBack, 5000);
+				speedUp.gone();
+				speedExist = false;
+			}
+			
         
             // spawns the power up and show in the game
             if (pUpExist){
@@ -241,6 +262,12 @@ function draw() {
                                 freeze.respawn();
                                 freezeExist = true;
                             }
+							
+							if(speedExist == false){
+								speedUp.respawn();
+								speedExist = true;
+							}
+							
                         setTimeout(init_enemies(enemy_count,enemy2_count,level), 3000);
 
 							level++;
@@ -392,6 +419,11 @@ function makeVulnerable(){
 
 function resetBomberSpeed(){
     makeSlow = false;
+    bomber.speed = 7;
+}
+
+function resetBomberSpeedBack(){
+    makeSpeed = false;
     bomber.speed = 7;
 }
 
