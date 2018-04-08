@@ -33,3 +33,34 @@ h2 {
     background-image: url(../res/images/bomb-in-desert.jpg);
     height:80%;
 }
+
+#bombermodelselect{
+    margin-left:47%;
+    margin-right:30%;
+}
+
+#bombermodeldisplay{
+    margin-left:42%;
+    margin-right:30%;
+}
+
+#buttonwrap{
+    text-align: center;
+}
+
+#singleplayerstart{
+    position:absolute;
+/*    top:50%;*/
+    left:43%;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    
+}

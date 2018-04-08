@@ -12,7 +12,15 @@ function Bomber() {
     var shieldImg;
     var bomberimage;
     var freezeEffect;
-    bombermanimg = loadImage("res/images/bomberman.png")
+        
+    //receive and change the selected bomber model
+    if(sessionStorage.getItem("bombermod") == 1)
+        bombermanimg = loadImage("res/images/bomberman.png");
+    else if (sessionStorage.getItem("bombermod") == 2)
+        bombermanimg = loadImage("res/images/bomberman2.png");
+    else
+        bombermanimg = loadImage("res/images/bomberman3.png");
+    
     
      
     shieldImg= loadImage("res/images/shield_bubble.png");

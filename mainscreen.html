@@ -2,8 +2,10 @@
 <html>
 <head>
     <title> Welcome to Bomberman Omega! </title>
-    <script src="framework/gameroute.js"></script>
     <link href="styles/style.css" rel="stylesheet"/>
+    <script type="text/javascript" src="bombermodel.js"></script>
+    <script type="text/javascript" src="bomber.js"></script>
+    <script src="gameroute.js"></script>
 </head>
 <body id="main">
     
@@ -11,12 +13,27 @@
     <br>
     <h1>Welcome to Bomberman Omega!</h1>
     <h2>Choose your player model:</h2>
-    
-    <br>
-    <br>
-    <br>
-    <br>
 
- 
+<div id="bombermodelselect">
+<!--select bomber model-->
+<select id="s1" onchange="f1()">
+        <option value="res/images/bomberman.png">Ghost</option>
+        <option value="res/images/bomberman2.png">Ninja</option>
+        <option value="res/images/bomberman3.png">Soldier</option>
+</select> <br><br>
+</div>
+    
+<div id="bombermodeldisplay">  
+<img id='img' src="res/images/bomberman.png" height="200" width="200">
+</div>
+    <br>
+    <br>
+    <br>
+    <br>
+<div id="buttonwrap">
+    <button id="singleplayerstart" value="single_player" onclick="loadIndex()">Play Single Player!</button>
+</div>
+
+    
 </body>
 </html>
