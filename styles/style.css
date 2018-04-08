@@ -1,14 +1,35 @@
+@font-face{
+    font-family: myFont;
+    src: url(../res/fonts/ArchivoBlack.otf);
+}
+
 html, body {
   height: 100%;
 }
 
-body {
+#game {
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+
+h1,h2 {
+    text-align: center;
+    font-family: myFont, sans-serif;
+    color:white;
+}
+
 h1 {
-	display: none;
+    font-size:50px;
+}
+
+h2 {
+    font-size:35px;
+}
+#main {
+    background-color: aliceblue;
+    background-image: url(../res/images/bomb-in-desert.jpg);
+    height:80%;
 }
