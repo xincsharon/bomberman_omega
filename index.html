@@ -1,25 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title> Bomberman Omega </title>
-	<link rel="header icon" href="res/images/explosion.png" type="image/x-icon">
-	<link rel="stylesheet" href="styles/style.css" type="text/css"> 
-	<script src="libraries/p5.js" type="text/javascript"></script>
-    <script src="libraries/p5.gif.js" type="text/javascript"></script>
-	<script src="libraries/p5.dom.js" type="text/javascript"></script>
-	<script src="libraries/p5.sound.js" type="text/javascript"></script>
-	<script src="libraries/p5.play.js" type="text/javascript"></script>
-	<script src="cloud.js" type="text/javascript"></script>
-	<script src="engine.js" type="text/javascript"></script>
-    <script src="bombermodel.js" type="text/javascript"></script>
-	<script src="bomber.js" type="text/javascript"></script>
-	<script src="bomb.js" type="text/javascript"></script>
-	<script src="enemy.js" type="text/javascript"></script>
-	<script src="explosion.js "type="text/javascript"></script>
-    <script src="Wall.js "type="text/javascript"></script>
-    <script src="powerup.js" type ="text/javascript"></script>
+    <title> Welcome to Bomberman Omega! </title>
+    <link href="styles/style.css" rel="stylesheet"/>
+    <script type="text/javascript" src="bombermodel.js"></script>
+    <script type="text/javascript" src="bomber.js"></script>
+    <script src="gameroute.js"></script> <!-- this script is used to call the loadGame() function in the button -->
 </head>
-<body id="game">
-<!--	<h1> Bomberman Omega </h1>-->
+<body id="main">
+    
+    <br>
+    <br>
+    <h1>Welcome to Bomberman Omega!</h1>
+    <h2>Choose your player model:</h2>
+
+<div id="bombermodelselect">
+<!--select bomber model-->
+<select id="s1" onchange="f1()">
+        <option value="res/images/bomberman.png">Ghost</option>
+        <option value="res/images/bomberman2.png">Ninja</option>
+        <option value="res/images/bomberman3.png">Soldier</option>
+</select> <br><br>
+</div>
+    
+<div id="bombermodeldisplay">  
+<img id='img' src="res/images/bomberman.png" height="200" width="200">
+</div>
+    <br>
+    <br>
+    <br>
+    <br>
+<div id="buttonwrap">
+    <button id="singleplayerstart" value="single_player" onclick="loadGame()">Play Single Player!</button>
+</div>
+
+    
 </body>
 </html>

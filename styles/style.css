@@ -1,3 +1,4 @@
+/* importing the font into css to be used */
 @font-face{
     font-family: myFont;
     src: url(../res/fonts/ArchivoBlack.otf);
@@ -14,20 +15,24 @@ html, body {
   align-items: center;
 }
 
-
+/* setting the heading at the main menu with text alignment, new fonts and font colour. */
 h1,h2 {
     text-align: center;
     font-family: myFont, sans-serif;
     color:white;
 }
 
+/* setting the size for the first heading "Welcome to Bomberman Omega!"*/
 h1 {
     font-size:50px;
 }
 
+/* setting font size for second heading "Choose your player model */
 h2 {
     font-size:35px;
 }
+
+/* importing the background image to the main menu screen */
 #main {
     background-color: aliceblue;
     background-image: url(../res/images/bomb-in-desert.jpg);
