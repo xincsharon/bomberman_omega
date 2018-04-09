@@ -40,7 +40,7 @@ h2 {
 }
 
 #bombermodelselect{
-    margin-left:47%;
+    margin-left:41%;
     margin-right:30%;
 }
 
@@ -69,3 +69,8 @@ h2 {
     cursor: pointer;
     
 }
+
+#img{
+    width: 50%;
+}
+

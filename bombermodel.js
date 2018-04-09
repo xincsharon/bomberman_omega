@@ -8,17 +8,21 @@ obj1.src=obj2.value;
     
     
 //transfer selected bombermodel to bomber.js
-if(s1.value == 'res/images/bomberman2.png')
+if(s1.value == 'res/images/bomberman.png')
     {
-    sessionStorage.setItem("bombermod", "2");
+    sessionStorage.setItem("bombermod", "1");
     }
+    else if (s1.value == 'res/images/bomberman2.png')
+        {
+        sessionStorage.setItem("bombermod", "2");
+        }
     else if (s1.value == 'res/images/bomberman3.png')
         {
         sessionStorage.setItem("bombermod", "3");
         }
     else 
         {
-        sessionStorage.setItem("bombermod", "1");
+            alert("Please select your bomber model or it will choose the previous model.");
         }
 }
 

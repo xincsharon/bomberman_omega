@@ -14,12 +14,12 @@ function Bomber() {
     var freezeEffect;
         
     //receive and change the selected bomber model
-    if(sessionStorage.getItem("bombermod") == 1)
-        bombermanimg = loadImage("res/images/bomberman.png");
+    if(sessionStorage.getItem("bombermod") == 3)
+        bombermanimg = loadImage("res/images/bomberman3.png");
     else if (sessionStorage.getItem("bombermod") == 2)
         bombermanimg = loadImage("res/images/bomberman2.png");
     else
-        bombermanimg = loadImage("res/images/bomberman3.png");
+        bombermanimg = loadImage("res/images/bomberman.png");
     
     
      
