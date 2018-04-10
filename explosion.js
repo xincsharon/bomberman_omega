@@ -12,7 +12,7 @@ function Explosion(bomb_x, bomb_y) {
 	this.expand_rate = 10; //bomb detonate speed
     
     //added gif image as explosion effect
-    var explosiongif = loadGif("res/images/explosiongif.gif");
+//    var explosiongif = loadGif("res/images/explosiongif.gif");
     
 	this.show = function() {
 		noStroke();
@@ -20,7 +20,7 @@ function Explosion(bomb_x, bomb_y) {
 //		ellipse(this.x, this.y, this.r, this.r);
         
         //draw the explosion image
-        image(explosiongif, this.x-85, this.y-90, 170, 170);
+        image(explosionGif, this.x-85, this.y-90, 170, 170);
 
 	}
 

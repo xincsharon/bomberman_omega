@@ -1,4 +1,4 @@
-function Enemy(imgenemy,life_allocated,size) {
+function Enemy(enemyImg,life_allocated,size) {
 	var xPos = window.innerWidth-50;
 	var yPos = window.innerHeight-50;
 	
@@ -50,15 +50,13 @@ function Enemy(imgenemy,life_allocated,size) {
     this.life = life_allocated;
     this.afterHit = false;
     
-    var monsterimg;
-    monsterimg = loadGif(imgenemy);
 
 	this.show = function() {
 		noStroke();
         if(size == 40){
-            image(monsterimg, this.x-40, this.y-40, this.r*2, this.r*2);
+            image(enemyImg, this.x-40, this.y-40, this.r*2, this.r*2);
         }else if(size == 65){
-            image(monsterimg, this.x-60, this.y-60, this.r*2, this.r*2);
+            image(enemyImg, this.x-60, this.y-60, this.r*2, this.r*2);
         }
 //		fill('#DF744A');
 //		ellipse(this.x, this.y, this.r, this.r);

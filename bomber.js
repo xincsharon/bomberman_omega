@@ -1,4 +1,4 @@
-function Bomber() {
+function Bomber(bombermanImg) {
 	this.x = width/2;
 	this.y = height/2;
 	this.r = 30;
@@ -9,25 +9,11 @@ function Bomber() {
     this.makeSlow = false;
 	this.moves = false;
     this.score = 0;
-    var shieldImg;
-    var bomberimage;
-    var freezeEffect;
-        
-    //receive and change the selected bomber model
-    if(sessionStorage.getItem("bombermod") == 3)
-        bombermanimg = loadImage("res/images/bomberman3.png");
-    else if (sessionStorage.getItem("bombermod") == 2)
-        bombermanimg = loadImage("res/images/bomberman2.png");
-    else
-        bombermanimg = loadImage("res/images/bomberman.png");
-    
-    
-     
-    shieldImg= loadImage("res/images/shield_bubble.png");
-    freezeEffect = loadImage("res/images/freezeEffect.png");
+//    var bomberimage;
+
 	this.show = function() {
 		noStroke();
-        image(bombermanimg, this.x-40, this.y-40, 80, 80);
+        image(bombermanImg, this.x-40, this.y-40, 80, 80);
         if(inVulnerable){
             image(shieldImg, this.x-40, this.y-40, 80, 80);
         }else if(makeSlow){
@@ -39,7 +25,7 @@ function Bomber() {
 	}
 
 	this.plant = function() {
-		var bomb = new Bomb(this.x, this.y);
+		var bomb = new Bomb(this.x, this.y, bombImg);
 		return bomb;
 	}
     

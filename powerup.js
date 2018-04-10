@@ -1,13 +1,10 @@
-function powerUp(x, radius) {
+function powerUp(powerImg, radius) {
 	this.x = Math.floor(Math.random() * width);
 	this.y = Math.floor(Math.random() * height);
     
 	this.makeSlow = false;
 	this.r = radius;
     this.angle =0;
-    
-    var powerImg;
-    powerImg = loadImage(x);
     
     this.show = function(){
         noStroke();
