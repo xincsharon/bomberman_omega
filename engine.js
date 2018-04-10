@@ -170,7 +170,7 @@ function setup() {
 	//sound.pause();
     
     //initialise a new bomber and pass the image needed into it
-    bomber = new Bomber(bombermanImg, shieldImg, freezeEffectImg, bombImg);
+    bomber = new Bomber();
 	init_enemies(enemy_count, enemy2_count, level, enemyGif, enemy2Gif);
 	initClouds();
 
@@ -654,7 +654,7 @@ function randomBetween(min, max){
 
 //reset the game after player press "ENTER"
 function reset(){
-	bomber = new Bomber(bombermanImg);
+	bomber = new Bomber();
 	level = 1;
 	inVulnerable = false;
 	bomb;

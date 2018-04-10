@@ -1,4 +1,4 @@
-function Bomber(bombermanImg) {
+function Bomber() {
 	this.x = width/2;
 	this.y = height/2;
 	this.r = 30;
@@ -17,7 +17,7 @@ function Bomber(bombermanImg) {
         if(inVulnerable){
             image(shieldImg, this.x-40, this.y-40, 80, 80);
         }else if(makeSlow){
-            image(freezeEffect, this.x-40, this.y-40, 80, 80);
+            image(freezeEffectImg, this.x-40, this.y-40, 80, 80);
         }
 //		fill('#DCB239');
 //		ellipse(this.x, this.y, this.r, this.r); 
@@ -25,7 +25,7 @@ function Bomber(bombermanImg) {
 	}
 
 	this.plant = function() {
-		var bomb = new Bomb(this.x, this.y, bombImg);
+		var bomb = new Bomb(this.x, this.y);
 		return bomb;
 	}
     
