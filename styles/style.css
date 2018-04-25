@@ -1,76 +1,100 @@
 /* importing the font into css to be used */
-@font-face{
+
+@font-face {
     font-family: myFont;
     src: url(../res/fonts/ArchivoBlack.otf);
 }
 
-html, body {
-  height: 100%;
-}
-
 #game {
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* setting the heading at the main menu with text alignment, new fonts and font colour. */
-h1,h2 {
-    text-align: center;
-    font-family: myFont, sans-serif;
-    color:white;
+body {
+    font-family: 'Bangers' !important;
+    color: white !important;
 }
 
-/* setting the size for the first heading "Welcome to Bomberman Omega!"*/
 h1 {
-    font-size:50px;
-}
-
-/* setting font size for second heading "Choose your player model */
-h2 {
-    font-size:35px;
-}
-
-/* importing the background image to the main menu screen */
-#main {
-    background-color: aliceblue;
-    background-image: url(../res/images/bomb-in-desert.jpg);
-    height:80%;
-}
-
-#bombermodelselect{
-    margin-left:41%;
-    margin-right:30%;
-}
-
-#bombermodeldisplay{
-    margin-left:42%;
-    margin-right:30%;
-}
-
-#buttonwrap{
+    margin-top: 50px !important;
+    font-size:50px !important;
     text-align: center;
 }
 
-#singleplayerstart{
-    position:absolute;
-/*    top:50%;*/
-    left:43%;
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 15px 32px;
+h3 {
+    margin-top: 50px !important;
+    margin-bottom: 50px !important;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    
 }
 
-#img{
-    width: 50%;
+.bck-img {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(../res/images/bomb-in-desert.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
+#bombermodelselect div {
+    text-align: center;
+}
+
+#bombermodelselect button{
+    width:100px;
+    font-size: 15px;
+}
+
+#bombermodelselect img {
+    width: 200px;
+}
+
+.startGame {
+    margin-top: 50px;
+}
+
+.startGame div {
+    text-align: center;
+}
+
+.startGame div button {
+    height: 50px;
+    width: 200px;
+    font-weight: bold;
+    font-size: 25px;
+    color:black;
+}
+
+.glyphicon-ok {
+    font-size: 25px !important;
+    color: lightgreen !important;
+}
+
+#gameover {
+    font-family: 'Bangers';
+}
+
+#gameover div{
+    text-align: center;
+}
+
+#gameover button{
+    height:50px;
+    width:200px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color:black;
+}
+
+#gameover h1,h2 {
+    color: black !important;    
+}
+
+#gameover h1{
+    font-size: 100px !important;
+}
+#highscore {
+    color: black;
+    font-size: 150px;
+    text-align: center;
+}

@@ -1,28 +1,24 @@
 
-//function to change the model selection in main screen and transfer value of bombermodel selected to bomber.js
-function f1()
-{
-var obj1= document.getElementById("img");
-var obj2= document.getElementById("s1");
-obj1.src=obj2.value;
-    
-    
-//transfer selected bombermodel to bomber.js
-if(s1.value == 'res/images/bomberman.png')
-    {
-    sessionStorage.setItem("bombermod", "1");
+//Create a session to determine which model is selected &
+//Toggle visibility of indication of selection
+function selectedBomber(x,modelType){
+    for(var i = 1; i <= 3; i++){
+        document.getElementById("selected_" + i).style.visibility = "hidden";
     }
-    else if (s1.value == 'res/images/bomberman2.png')
-        {
-        sessionStorage.setItem("bombermod", "2");
-        }
-    else if (s1.value == 'res/images/bomberman3.png')
-        {
-        sessionStorage.setItem("bombermod", "3");
-        }
-    else 
-        {
-            alert("Please select your bomber model or it will choose the previous model.");
-        }
+    document.getElementById(x).style.visibility = "visible";
+    sessionStorage.setItem("selectedBomber",modelType);
 }
 
+//Redirect to main screen
+//Clear everything is session
+function backToMain(){
+    window.location.href = "index.html";
+    sessionStorage.clear();
+}
+
+//Redirect to game screen
+//Clear highscore in session
+function restartGame(){
+    window.location.href = "game.html";
+    sessionStorage.removeItem("highscore");
+}

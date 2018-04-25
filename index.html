@@ -1,40 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    <script>
+        window.onload(sessionStorage.clear());
+    </script>
 <head>
     <title> Welcome to Bomberman Omega! </title>
-    <link href="styles/style.css" rel="stylesheet"/>
+    <link href="styles/style.css" rel="stylesheet" />
+    <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet'>
     <script type="text/javascript" src="bombermodel.js"></script>
     <script type="text/javascript" src="bomber.js"></script>
-    <script src="gameroute.js"></script> <!-- this script is used to call the loadGame() function in the button -->
+    <link href="styles/bootstrap.min.css" rel="stylesheet" />
+    <script src="gameroute.js"></script>
+    <script src="https://unpkg.com/scrollreveal/dist/scrollreveal.min.js"></script>
+    <!-- this script is used to call the loadGame() function in the button -->
 </head>
-<body id="main">
-    
-    <br>
-    <br>
-    <h1>Welcome to Bomberman Omega!</h1>
-    <h2>Choose your player model:</h2>
 
-<div id="bombermodelselect">
-<!--select bomber model-->
-<select id="s1" onchange="f1()">
-        <option class = "option1" value="res/images/questionmark.png">Choose your model / Previous model</option>
-        <option value="res/images/bomberman.png">Ghost</option>
-        <option value="res/images/bomberman2.png">Ninja</option>
-        <option value="res/images/bomberman3.png">Soldier</option>
-</select> <br><br>
-</div>
-    
-<div id="bombermodeldisplay">  
-<img id='img' src="res/images/questionmark.png">
-</div>
-    <br>
-    <br>
-    <br>
-    <br>
-<div id="buttonwrap">
-    <button id="singleplayerstart" value="single_player" onclick="loadGame()">Play Single Player!</button>
-</div>
+<body class="bck-img">
+    <div class="container">
+        <h1>Welcome to Bomberman Omega!</h1>
+        <h3><span class="glyphicon glyphicon-chevron-down headerGlyph"></span> Choose your player model <span class="glyphicon glyphicon-chevron-down headerGlyph"></span></h3>
 
-    
+        <div class="row" id="bombermodelselect">
+            <div class="col-md-4 bomber1">
+                <img id="ghost" src="res/images/bomberman.png" />
+                <span id="selected_1" style="hidden" class="glyphicon glyphicon-ok"></span>
+                <p><button type="button" class="btn btn-default" onclick="selectedBomber('selected_1','ghost')">Ghost</button></p>
+
+            </div>
+            <div class="col-md-4 bomber2">
+                <img src="res/images/bomberman2.png" />
+                <span id="selected_2" style="visibility: hidden" class="glyphicon glyphicon-ok"></span>
+                <p><button type="button" class="btn btn-default" onclick="selectedBomber('selected_2','ninja')">Ninja</button></p>
+            </div>
+            <div class="col-md-4 bomber3">
+                <img src="res/images/bomberman3.png" />
+                <span id="selected_3" style="visibility: hidden" class="glyphicon glyphicon-ok"></span>
+                <p><button type="button" class="btn btn-default" onclick="selectedBomber('selected_3','soldier')">Soldier</button></p>
+            </div>
+        </div>
+
+        <div class="row startGame">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" onclick="loadGame()">Start Game</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.sr = ScrollReveal();
+        sr.reveal('.headerGlyph', {
+            duration: 1000,
+            origin: 'top'
+        });
+        sr.reveal('.bomber1', {
+            duration: 1200,
+            origin: 'top',
+            distance: '100px'
+        });
+        sr.reveal('.bomber2', {
+            duration: 1200,
+            origin: 'top',
+            distance: '100px',
+        });
+        sr.reveal('.bomber3', {
+            duration: 1200,
+            origin: 'top',
+            distance: '100px',
+        });
+
+    </script>
+
 </body>
+
 </html>

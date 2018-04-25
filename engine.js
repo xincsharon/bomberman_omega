@@ -121,9 +121,9 @@ function setup() {
     freezeEffectImg = loadImage("res/images/freezeEffect.png", imgLoaded(), ifImgLoadError(), duringloading());
     //setup bomberman image    
     //receive and change the selected bomber model
-    if(sessionStorage.getItem("bombermod") == 3){
+    if(sessionStorage.getItem("selectedBomber") == 'soldier'){
         bombermanImg = loadImage("res/images/bomberman3.png", imgLoaded(), ifImgLoadError(), duringloading());
-    }else if (sessionStorage.getItem("bombermod") == 2){
+    }else if (sessionStorage.getItem("selectedBomber") == 'ninja'){
         bombermanImg = loadImage("res/images/bomberman2.png", imgLoaded(), ifImgLoadError(), duringloading());
     }else{
         bombermanImg = loadImage("res/images/bomberman.png", imgLoaded(), ifImgLoadError(), duringloading());
@@ -304,7 +304,6 @@ function draw() {
         textFont("Impact");
         fill('#FEDCD2');
         text("by alfisalvacion", 50, 90);*/
-
         textSize(40);
         text("Level ", 50, 60);
         text(level, 155, 60);
@@ -331,20 +330,22 @@ function draw() {
 
         if (bomber.life <= 0) {
             gameover = true;
-            textSize(200);
-            textFont("Impact");
-            fill(211, 8, 93);
-            text("GAME OVER", width/6 + 30, height/2);
-
-            textSize(85);
-            // textFont("Impact");
-            fill('#FEDCD2');
-            text("You reached Level ", width/4 + 10, height/2 + 90);	
-            text(level, width/2 + 270, height/2 + 90);	
-            textSize(70);
-            // textFont("Impact");
-            fill('#DCB239');
-            text("Press ENTER to play again", width/5 + 70, height/2 + 170);		
+            window.location.href = "gameover.html";
+            sessionStorage.setItem("highscore",bomber.score);
+//            textSize(200);
+//            textFont("Impact");
+//            fill(211, 8, 93);
+//            text("GAME OVER", width/6 + 30, height/2);
+//
+//            textSize(85);
+//            // textFont("Impact");
+//            fill('#FEDCD2');
+//            text("You reached Level ", width/4 + 10, height/2 + 90);	
+//            text(level, width/2 + 270, height/2 + 90);	
+//            textSize(70);
+//            // textFont("Impact");
+//            fill('#DCB239');
+//            text("Press ENTER to play again", width/5 + 70, height/2 + 170);		
         }
 
         else {		

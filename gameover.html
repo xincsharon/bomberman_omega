@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <title>Game Over Page</title>
+    <link href="styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="styles/style.css" rel="stylesheet"/>
+    <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet'>
+    <script type="text/javascript" src="bombermodel.js"></script>
+</head>
+    
+
+    
+<body id="gameover">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Game Over!!</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Your Highscore</h2>
+                <div id="highscore"></div>
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" onclick="restartGame()">Start Again</button>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" onclick="backToMain()">Back to Main Screen</button>
+            </div>
+        </div>
+    </div>
+    
+<script>
+    //Get the highscore stored in the session and display it
+    var get_highscore = sessionStorage.getItem("highscore");
+    console.log(get_highscore);
+    document.getElementById("highscore").innerHTML = get_highscore;
+</script>
+</body>
+
+</html>
