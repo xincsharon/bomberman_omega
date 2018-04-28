@@ -1,7 +1,8 @@
 var bomber;
 var inVulnerable = false;
-var makeSlow =  false;
+var makeSlow = false;
 var makeSpeed = false;
+var makeStop = false;
 var bomb;
 var bomb_flag = false;
 var detonated = false;
@@ -9,17 +10,30 @@ var has_exploded = false;
 var gone = false;
 var explosion;
 
-var pickUp;
-var powerUps;
 var freeze;
 var freezeEffect;
-var pUpExist = true;
-var freezeExist = true;
-var speedUp;
-var speedExist = true;
+var freezeImg;
+var freezeTraps = [];
+
 var spikeTrap;
-var spikeExist = true;
 var spikeEffect;
+var spikeTrapImg;
+var spikeTraps = [];
+
+var pickUp;
+var powerUps;
+var powImg;
+var pUpExist = true;
+
+var speedUp;
+var speedUpImg;
+var speedExist = true;
+
+var timeStop;
+var timeStopImg;
+var timestop_effect;
+var timeStopExist = true;
+var timeStopEffect;
 
 var enemies = [];
 var enemy_count = 2;
@@ -71,12 +85,13 @@ var numImg = 7;
 
 
 
-function imgLoaded(){
-    imgCount ++;
-    if(imgCount == numImg){
+function imgLoaded() {
+    imgCount++;
+    if (imgCount == numImg) {
         imgLoading = false;
     }
 }
+
 function gifLoading() {
     console.log("The gif starts loading.");
 }
@@ -96,61 +111,62 @@ function ifImgLoadError() {
 function ifGifLoadError() {
     console.log("There's an error, gif is not loaded");
 }
+
 function duringloading() {
     console.log("The file is still loading.");
 }
+
 function setup() {
-    
-	var myCanvas = createCanvas(window.innerWidth, window.innerHeight);
-	
-    
+    var myCanvas = createCanvas(window.innerWidth, window.innerHeight);
+
     //load 2 types of enemy's gif image
     enemyGif = loadGif("res/images/monster2.gif");
     enemy2Gif = loadGif("res/images/monster.gif");
+
     //load explosion gif
     explosionGif = loadGif("res/images/explosiongif.gif");
-    
+
     //load add life powerup image
-    var powImg = loadImage("res/images/heartImg.png", imgLoaded(), ifImgLoadError(), duringloading());
-    //load Freeze power up
-    var freezeImg = loadImage("res/images/freeze2.png", imgLoaded(), ifImgLoadError(), duringloading());
+    powImg = loadImage("res/images/heartImg.png", imgLoaded(), ifImgLoadError(), duringloading());
     //load speed up power up
-    var speedUpImg = loadImage("res/images/speed.png", imgLoaded(), ifImgLoadError(), duringloading());
+    speedUpImg = loadImage("res/images/speed.png", imgLoaded(), ifImgLoadError(), duringloading());
+    //load spike trap image
+    spikeTrapImg = loadImage("res/images/spike_trap.png", imgLoaded(), ifImgLoadError(), duringloading());
+    //load Freeze trap image
+    freezeImg = loadImage("res/images/freeze2.png", imgLoaded(), ifImgLoadError(), duringloading());
+    //load time trap image
+    timeStopImg = loadImage("res/images/stoptime.png", imgLoaded(), ifImgLoadError(), duringloading());
     //load bomb image
     bombImg = loadImage("res/images/TNT-256.png", imgLoaded(), ifImgLoadError(), duringloading());
     //load shield image
-    shieldImg= loadImage("res/images/shield_bubble.png", imgLoaded(), ifImgLoadError(), duringloading());
+    shieldImg = loadImage("res/images/shield_bubble.png", imgLoaded(), ifImgLoadError(), duringloading());
     //load freeze effect image
     freezeEffectImg = loadImage("res/images/freezeEffect.png", imgLoaded(), ifImgLoadError(), duringloading());
-    //load spike trap image
-    var spikeTrapImg = loadImage("res/images/spike_trap.png", imgLoaded(), ifImgLoadError(), duringloading());
+    //load time stop effect image
+    timeStopEffect = loadImage("res/images/stun.png", imgLoaded(), ifImgLoadError(), duringloading());
+    
     //setup bomberman image    
     //receive and change the selected bomber model
-    if(sessionStorage.getItem("selectedBomber") == 'soldier'){
+    if (sessionStorage.getItem("selectedBomber") == 'soldier') {
         bombermanImg = loadImage("res/images/bomberman3.png", imgLoaded(), ifImgLoadError(), duringloading());
-    }else if (sessionStorage.getItem("selectedBomber") == 'ninja'){
+    } else if (sessionStorage.getItem("selectedBomber") == 'ninja') {
         bombermanImg = loadImage("res/images/bomberman2.png", imgLoaded(), ifImgLoadError(), duringloading());
-    }else{
+    } else {
         bombermanImg = loadImage("res/images/bomberman.png", imgLoaded(), ifImgLoadError(), duringloading());
     }
+
     //loading screen background
     loading_screen = loadImage("res/images/bomberman_bg.png");
-    
-    
-    
+
     //create add life power up
     powerUps = new powerUp(powImg, 20);
-    //create freeze power up
-    freeze = new powerUp(freezeImg, 30);
     //create speedUp power up
-    speedUp = new powerUp(speedUpImg,25);
-    //create spike trap
-    spikeTrap = new powerUp(spikeTrapImg, 30);
-    
-    
-    
+    speedUp = new powerUp(speedUpImg, 25);
+    //create timeStop power up
+    timeStop = new powerUp(timeStopImg, 30);
+
     //load background music
-	var sound = loadSound("res/music/bomberman.mp3", SELoading(), ifSELoadError(), duringloading());
+    var sound = loadSound("res/music/bomberman.mp3", SELoading(), ifSELoadError(), duringloading());
     //load sound effect for forcefield when player lose one life
     forceFieldOn = loadSound("res/music/force_field_on.mp3", SELoading(), ifSELoadError(), duringloading());
     //load sound effect for pick up power up
@@ -159,151 +175,147 @@ function setup() {
     freezeEffect = loadSound("res/music/freezeEffect.mp3", SELoading(), ifSELoadError(), duringloading());
     //load sound effect for spike trap
     spikeEffect = loadSound("res/music/spiketrap_effect.mp3", SELoading(), ifSELoadError(), duringloading());
-    
-   
-    
+    // load sound effect for time stop
+    timestop_effect = loadSound("res/music/timestop_effect.mp3", SELoading(), ifSELoadError(), duringloading());
+
     //add all the sound effect into the array for checking purpose in draw() function
     SE.push(sound);
     SE.push(forceFieldOn);
     SE.push(pickUp);
     SE.push(freezeEffect);
-    SE.push(spikeEffect);
-    
+
     //add all the gif into the array for checking purpose in draw() function
     gif.push(enemyGif);
     gif.push(enemy2Gif);
     gif.push(explosionGif);
 
-    
-	//sound.play();
-	//sound.pause();
-    
+    //sound.play();
+    //sound.pause();
+
     //initialise a new bomber and pass the image needed into it
     bomber = new Bomber();
-	init_enemies(enemy_count, enemy2_count, level, enemyGif, enemy2Gif);
-	initClouds();
 
+    init_enemies(enemy_count, enemy2_count, level, enemyGif, enemy2Gif);
+    init_freezeTrap(freezeImg);
+    init_spikeTrap(spikeTrapImg);
+    initClouds();
+}
 
+//Initialize an array to store spike traps
+function init_spikeTrap(spikeTrapImg) {
+    var spikeTrap = new trap(spikeTrapImg, 80);
+    spikeTraps.push(spikeTrap);
+}
+
+//Intialize an array to store freeze traps
+function init_freezeTrap(freezeImg) {
+    var freeze = new trap(freezeImg, 30);
+    freezeTraps.push(freeze);
 }
 
 function init_enemies(e, e2, current_level, eGif, e2Gif) {
-	for (var i = 0; i < e; i++) {
-		var enemy = new Enemy(eGif,1,40);
-		enemies.push(enemy); 
-	}
-    
-    
-    if(current_level >= 2){
-        for(var i = 0; i < e2; i++) {
-		  var enemy = new Enemy(e2Gif,3,65);
-		  enemies.push(enemy); 
-	   }
+    for (var i = 0; i < e; i++) {
+        var enemy = new Enemy(eGif, 1, 40);
+        enemies.push(enemy);
+    }
+
+    if (current_level >= 2) {
+        for (var i = 0; i < e2; i++) {
+            var enemy = new Enemy(e2Gif, 3, 65);
+            enemies.push(enemy);
+        }
     }
 }
 
 
 function draw() {
     console.log("The following console log is from Draw():");
-    console.log("Loading: "+ loading);
-	console.log("shield SE loaded:"+forceFieldOn.isLoaded());
-    console.log("pickup SE loaded:"+pickUp.isLoaded());
-//    console.log("sound SE loaded:"+sound.isLoaded());
+    console.log("Loading: " + loading);
+    console.log("shield SE loaded:" + forceFieldOn.isLoaded());
+    console.log("pickup SE loaded:" + pickUp.isLoaded());
+    //    console.log("sound SE loaded:"+sound.isLoaded());
     console.log("Number of sound loaded: " + soundCount);
     console.log("First gif is loaded:" + enemyGif.loaded());
     console.log("Second gif is loaded:" + enemy2Gif.loaded());
-    console.log("Gifs loaded: "+ gifCount);
-    console.log("Images loaded: "+imgCount);
+    console.log("Gifs loaded: " + gifCount);
+    console.log("Images loaded: " + imgCount);
     console.log("SE loaded: " + soundCount);
-    
-//    console.log(powImg);
-//    console.log(speedUpImg);
-//    console.log(freezeImg);
-    console.log("In Draw() , the gif loaded count is : "+gifCount+" Status of gif loading: " + gifLoading);
-    
+    console.log("In Draw() , the gif loaded count is : " + gifCount + " Status of gif loading: " + gifLoading);
+
     //check if the sound effects in the arrays are all loaded
-    for(var i=0; i < SE.length; i++){
-        if(SE[i].isLoaded()){
-            tempSoundCount ++;
+    for (var i = 0; i < SE.length; i++) {
+        if (SE[i].isLoaded()) {
+            tempSoundCount++;
         }
     }
     soundCount = tempSoundCount;
     tempSoundCount = 0;
-    
-    if(soundCount == SE.length){
+
+    if (soundCount == SE.length) {
         SELoading = false;
     }
-    
+
     //check if the gifs in the array are all loaded
-    for(var i=0; i < gif.length; i++){
-        if(gif[i].loaded()){
-            tempGifCount ++;
+    for (var i = 0; i < gif.length; i++) {
+        if (gif[i].loaded()) {
+            tempGifCount++;
         }
     }
-    
-    
+
     gifCount = tempGifCount;
     tempGifCount = 0;
-    
-    if(gifCount == gif.length){
+
+    if (gifCount == gif.length) {
         gifLoading = false;
     }
-    
 
-    
     //if sound efects, gifs and images are not loading, then stop loading by setting it as false
-    if(! SELoading && !gifLoading && !imgLoading){
+    if (!SELoading && !gifLoading && !imgLoading) {
         loading = false;
     }
-    
 
-    
-    if(loading){
+    if (loading) {
         console.log("Loading screen on");
-        background(loading_screen,0,0);
-        
-        textFont("Impact");
-	   fill('#ffffff');
-        textSize(50);
-	   text("Loading... ", width/5 *2, height/2 - 150);
+        background(loading_screen, 0, 0);
 
-        
+        textFont("Impact");
+        fill('#ffffff');
+        textSize(50);
+        text("Loading... ", width / 5 * 2, height / 2 - 150);
+
         stroke(255);
         noFill();
-        rect(width/3, height/2 - 100, width/3, 20);
+        rect(width / 3, height / 2 - 100, width / 3, 20);
 
         noStroke();
         fill(255, 100);
-        var w = (width/3) * ((soundCount + gifCount + imgCount) / (SE.length + gif.length + numImg));
-        rect(width/3 , height/2 - 100, w, 20);
-        
+        var w = (width / 3) * ((soundCount + gifCount + imgCount) / (SE.length + gif.length + numImg));
+        rect(width / 3, height / 2 - 100, w, 20);
+
         stroke(255);
         noFill();
-        ellipse(width/2, height * 2 /3, 250, 250);
-          
+        ellipse(width / 2, height * 2 / 3, 250, 250);
+
         translate(width / 2, height * 2 / 3);
         rotate(angle3);
         strokeWeight(4);
         stroke(255);
-        line(0,0,70,0);
+        line(0, 0, 70, 0);
         angle3 += 0.05;
-        
+
         rotate(angle);
         strokeWeight(4);
         stroke(255);
-        line(0,0,100,0);
+        line(0, 0, 100, 0);
         angle += 0.1;
-        
+
         rotate(angle2);
         strokeWeight(2);
         stroke(255);
-        line(0,0,100,0);
+        line(0, 0, 100, 0);
         angle2 += 0.3;
-        
-    }else{
-    
-
+    } else {
         background(13, 16, 17);
-
         textSize(40);
         textFont("Impact");
         fill('#BFD8D2');
@@ -332,101 +344,97 @@ function draw() {
         if (!bomber.moves) {
             fill(255)
             textSize(25);
-            text("Kill all the enemies using your bomb", width/2 - 190, height/2 + 280);
-            text("SPACE/J to plant, C/K to detonate", width/2 - 170, height/2 + 310);
-            text("Use Arrow Keys or W, A, S, D to move", width/2 - 185, height/2 + 340);
+            text("Kill all the enemies using your bomb", width / 2 - 190, height / 2 + 280);
+            text("SPACE/J to plant, C/K to detonate", width / 2 - 170, height / 2 + 310);
+            text("Use Arrow Keys or W, A, S, D to move", width / 2 - 185, height / 2 + 340);
         }
-
+        
+        //If bomber's life becomes 0, redirect to gameover.html.
+        //Set session storage of the highscore
         if (bomber.life <= 0) {
             gameover = true;
             window.location.href = "gameover.html";
-            sessionStorage.setItem("highscore",bomber.score);
-//            textSize(200);
-//            textFont("Impact");
-//            fill(211, 8, 93);
-//            text("GAME OVER", width/6 + 30, height/2);
-//
-//            textSize(85);
-//            // textFont("Impact");
-//            fill('#FEDCD2');
-//            text("You reached Level ", width/4 + 10, height/2 + 90);	
-//            text(level, width/2 + 270, height/2 + 90);	
-//            textSize(70);
-//            // textFont("Impact");
-//            fill('#DCB239');
-//            text("Press ENTER to play again", width/5 + 70, height/2 + 170);		
-        }
-
-        else {		
+            sessionStorage.setItem("highscore", bomber.score);
+        } else {
             handleControls();
+            
+            //Loop freeze trap array to display traps.
+            //Freeze traps only spawn starting from Lv3.
+            //If freeze trap hits bomber, decrease bomber movement from 7 to 1 for 1.5 seconds.
+            for (var i = 0; i < freezeTraps.length; i++) {
+                if (level >= 3) {
+                    freezeTraps[i].show();
 
-                if(level >= 1){
-                    // Spawns the trap and show in the game    
-                    if(freezeExist){
-                        freeze.show();
-                    }
-
-                    // Check if trap is activated and execute effect only when bomber is vunerable
-                    if(freeze.hits(bomber) && !makeSlow && !inVulnerable){
+                    if (freezeTraps[i].hits(bomber) && !makeSlow && !inVulnerable) {
                         makeSlow = true;
                         freezeEffect.play();
                         bomber.speed = 1;
-                        setTimeout(resetBomberSpeed,1500);
-                        freeze.gone();
-                        freezeExist = false;
+                        setTimeout(resetBomberSpeed, 1500);
+                        freezeTraps.splice(i, 1);
                     }
-                    
-                    
-                    // Spawns Spike Trap and show in the game.
-                    if(spikeExist){
-                        spikeTrap.show();
-                    }
-                    
-                    // Check if trap is activated
-                    if (spikeTrap.hits(bomber) && !inVulnerable){
+                }
+            }
+
+            //Time stop power up(s) only spawn starting from Lv5
+            //Decrease enemy detection range to 0 for 7 seconds.
+            if (level >= 5) {
+                if (timeStopExist) {
+                    timeStop.show();
+                }
+
+                if (timeStop.hits(bomber)) {
+                    timestop_effect.play();
+                    stopEnemyMovement();
+                    setTimeout(resetEnemyMovement, 7000);
+                    timeStop.gone();
+                    timeStopExist = false;
+                }
+            }
+            
+            //Loop spike trap array to display traps.
+            //Spike traps only spawn starting from Lv8.
+            //If spike trap hits bomber, deduct a life and make bomber invunerable for 2 seconds.
+            for (var i = 0; i < spikeTraps.length; i++) {
+                if (level >= 8) {
+                    spikeTraps[i].show();
+
+                    if (spikeTraps[i].hits(bomber) && !inVulnerable) {
                         spikeEffect.play();
-                        tookDamage = true;
                         inVulnerable = true;
                         setTimeout(makeVulnerable, 2000);
-                        bomber.life-=1;
-                        spikeTrap.gone();
-                        spikeExist = false;
+                        bomber.life -= 1;
+                        spikeTraps.splice(i, 1);
                     }
-                    
-
                 }
+            }
             
-                
+            //spawn the speed up in game 
+            if (speedExist) {
+                speedUp.show();
+            }
 
-                //spawn the speed up in game 
-                if(speedExist){
-                    speedUp.show();
-                }
+            //increase bomber speed after they have hit the power up, then it will gone after 
+            if (speedUp.hits(bomber) && !inVulnerable && !makeSlow) {
+                makeSpeed = true;
+                pickUp.play();
+                bomber.speed = 10;
+                setTimeout(resetBomberSpeedBack, 5000);
+                speedUp.gone();
+                speedExist = false;
+            }
 
-                //increase bomber speed after they have hit the power up, then it will gone after 
-                if(speedUp.hits(bomber) && !inVulnerable && !makeSlow){
-                    makeSpeed = true;
-                    pickUp.play();
-                    bomber.speed = 10;
-                    setTimeout(resetBomberSpeedBack, 5000);
-                    speedUp.gone();
-                    speedExist = false;
-                }
+            // spawns the power up and show in the game
+            if (pUpExist) {
+                powerUps.show();
+            }
 
-
-                // spawns the power up and show in the game
-                if (pUpExist){
-                    powerUps.show();
-                    
-                }   
-
-                // when the player hits the heart, bomber's life will increase by 1, while  at the same time the heart will be gone.
-                if (powerUps.hits(bomber)){ 
-                    pickUp.play();
-                    bomber.life+=1;
-                    powerUps.gone();
-                    pUpExist = false;
-                }
+            // when the player hits the heart, bomber's life will increase by 1, while  at the same time the heart will be gone.
+            if (powerUps.hits(bomber)) {
+                pickUp.play();
+                bomber.life += 1;
+                powerUps.gone();
+                pUpExist = false;
+            }
 
             for (var i = 0; i < enemies.length; i++) {
                 enemies[i].show();
@@ -434,7 +442,7 @@ function draw() {
                 //enemy detect if bomberman move
                 if (bomber.moves) {
                     //more enemies will chase after bomberman if he's in the range
-                    enemies[i].move(bomber);		
+                    enemies[i].move(bomber);
                 }
 
                 //detect if enemy hit bomberman and detect if bomberman is still in inVulnerable state
@@ -464,18 +472,18 @@ function draw() {
 
                 if (detonated && !has_exploded) {
                     for (var i = 0; i < enemies.length; i++) {
-                        if (explosion.hits(enemies[i])){
+                        if (explosion.hits(enemies[i])) {
                             console.log("hit!");
 
                             //Make sure that it only run this function once that is to minus 1 life from current enemy
-                            if(!enemies[i].afterHit){
+                            if (!enemies[i].afterHit) {
                                 enemies[i].lostLife();
                                 enemies[i].afterHit = true;
                             }
 
                             //Check if life is less than 1, remove it from enemies array
-                            if(enemies[i].life < 1){
-                                enemies.splice(i,1);
+                            if (enemies[i].life < 1) {
+                                enemies.splice(i, 1);
                             }
 
                             //When hit, add 50 points
@@ -483,48 +491,71 @@ function draw() {
 
 
                             //If enemy is wiped out, then will calculate the next round of enemies
-                            if (enemies.length < 1 ) {
+                            if (enemies.length < 1) {
                                 enemy_count = tmp_count;
                                 tmp_count += enemy_add;
 
                                 //Starts increment if level is more than 2 for new enemy
-                                if(level >= 2){
-                                    enemy2_count++; 
+                                if (level >= 2) {
+                                    enemy2_count++;
                                 }
 
                                 bomber.moves = false;
 
-                                // checks if there's any life power up from the previous level, if no then spawns a new one.
-                                if (pUpExist == false){
-                                    powerUps.respawn(); 
+                                //Check if life power up exist, if TRUE respawn new, else respawn at random location next round.
+                                if (!pUpExist) {
+                                    powerUps.respawn();
                                     pUpExist = true;
-                                }
-
-                                if(freezeExist == false){
-                                    freeze.respawn();
-                                    freezeExist = true;
-                                }
-
-                                if(speedExist == false){
-                                    speedUp.respawn();
-                                    speedExist = true;
+                                }else {
+                                    powerUps.respawn();
                                 }
                                 
-                                if (spikeExist == false){
-                                    spikeTrap.respawn();
-                                    spikeExist = true;
-                                    
+                                //Check if speed up power up exist, if TRUE respawn new, else respawn at random location next round.
+                                if (!speedExist) {
+                                    speedUp.respawn();
+                                    speedExist = true;
+                                }else {
+                                    speedUp.respawn();
+                                }
+                                
+                                //Check if time stop power up exist, if TRUE respawn new, else respawn at random location next round.
+                                if (!timeStopExist) {
+                                    timeStop.respawn();
+                                    timeStopExist = true;
+                                }else {
+                                    timeStop.respawn();
+                                }
+                                
+                                //Check array for freeze traps, if still contain trap, add another trap next round.
+                                //Re-intialize freeze trap array if contain no trap from previous round.
+                                if (level >= 3) {
+                                    if (freezeTraps.length < 1) {
+                                        init_freezeTrap(freezeImg, 30);
+                                    } else {
+                                        var freeze = new trap(freezeImg, 30);
+                                        freezeTraps.push(freeze);
+                                    }
                                 }
 
-                            setTimeout(init_enemies(enemy_count,enemy2_count,level, enemyGif, enemy2Gif), 3000);
-
+                                //Check array for spike traps, if still contain trap, add another trap next round.
+                                //Re-intialize spike trap array if contain no trap from previous round.
+                                if (level >= 8) {
+                                    if (spikeTraps.length < 1) {
+                                        init_spikeTrap(spikeTrapImg, 80);
+                                    } else {
+                                        var spikeTrap = new trap(spikeTrapImg, 80);
+                                        spikeTraps.push(spikeTrap);
+                                    }
+                                }
+                                
+                                setTimeout(init_enemies(enemy_count, enemy2_count, level, enemyGif, enemy2Gif), 3000);
                                 level++;
 
                                 for (var j = 0; j < enemies.length; j++) {
                                     enemies[j].range += 30; //after each lv, enemy detection range increase 
                                     enemies[j].speed += 0.5; //new add on, for enemy speed increase every level.
-                                }                           				
-                            }		
+                                }
+                            }
                         }
                     }
 
@@ -540,7 +571,7 @@ function draw() {
                 }
 
                 //after bomb have detonated, and check if the bomb have already fade
-                if (has_exploded && !gone){
+                if (has_exploded && !gone) {
                     explosion.show();
                     explosion.fadeout();
                     if (explosion.transparency <= 0 && explosion.r <= 0) {
@@ -550,10 +581,9 @@ function draw() {
                         bomb_flag = false;
                     }
                 }
-
             }
 
-            bomber.show();	
+            bomber.show();
 
             //this function is for submitting mist to cloud
             for (var c of mist) {
@@ -564,152 +594,149 @@ function draw() {
     }
 }
 
-function toggleKey(keyCode, isPressed){
+function toggleKey(keyCode, isPressed) {
+    if (keyCode == RIGHT_KEY || keyCode == LEFT_KEY || keyCode == UP_KEY || keyCode == DOWN_KEY ||
+        keyCode == 68 || keyCode == 65 || keyCode == 87 || keyCode == 83)
+        bomber.moves = true;
 
+    if (keyCode == RIGHT_KEY || keyCode == 68) {
+        controller.right = isPressed;
+    }
+    if (keyCode == LEFT_KEY || keyCode == 65) {
+        controller.left = isPressed;
+    }
+    if (keyCode == UP_KEY || keyCode == 87) {
+        controller.up = isPressed;
+    }
+    if (keyCode == DOWN_KEY || keyCode == 83) {
+        controller.down = isPressed;
+    }
+    if ((keyCode == SPACE || keyCode == 74) && !bomb_flag) {
+        bomb_flag = true;
+        bomb = bomber.plant();
 
-	if (keyCode == RIGHT_KEY || keyCode == LEFT_KEY || keyCode == UP_KEY || keyCode == DOWN_KEY || 
-		keyCode == 68 || keyCode == 65 || keyCode == 87 || keyCode == 83)
-		bomber.moves = true;
-
-	if (keyCode == RIGHT_KEY || keyCode == 68) {
-		controller.right = isPressed;
-	}
-	if (keyCode == LEFT_KEY || keyCode == 65) {
-		controller.left = isPressed;
-	}
-	if (keyCode == UP_KEY || keyCode == 87) {
-		controller.up = isPressed;
-	} 
-	if (keyCode == DOWN_KEY || keyCode == 83) {
-		controller.down = isPressed;
-	}
-	if ((keyCode == SPACE || keyCode == 74) && !bomb_flag){
-		bomb_flag = true;
-		bomb = bomber.plant();
-        
-        for(var i=0; i<enemies.length ; i++){
+        for (var i = 0; i < enemies.length; i++) {
             enemies[i].afterHit = false;
         }
-	} 
-	if ((keyCode == C_KEY || keyCode == 75) && (!detonated && bomb_flag)){
-		console.log("explodes!");
-		// console.log(explode);
-		// sound.play();
-		var explode = new Audio("res/music/explode.mp3"); //exploding sound
-	explode.play(); //play the sound 
-	
-		detonated = true;
-		explosion = new Explosion(bomb.x, bomb.y);			
-	}
-	console.log(keyCode);
-	if (keyCode == ENTER && gameover){
-		gameover = false;
-		reset();
-		draw();
-	}
+    }
+    if ((keyCode == C_KEY || keyCode == 75) && (!detonated && bomb_flag)) {
+        console.log("explodes!");
+        // console.log(explode);
+        // sound.play();
+        var explode = new Audio("res/music/explode.mp3"); //exploding sound
+        explode.play(); //play the sound 
+
+        detonated = true;
+        explosion = new Explosion(bomb.x, bomb.y);
+    }
+
+    console.log(keyCode);
+
+    if (keyCode == ENTER && gameover) {
+        gameover = false;
+        reset();
+        draw();
+    }
 }
 
-
-
-function handleControls(){
-     
-    //detect when the bomber touch the wall
-    /*var touchright = false;
-    var touchleft = false;
-    
-    if ((((bomber.x <= wall.x1) || (bomber.x >= (wall.x1+5))) && (bomber.y >= wall.y1) || (bomber.y <= wall.y1 +5) || (bomber.y >= (wall.y1*2))) && (((bomber.x <= wall.x2) || (bomber.x >= (wall.x2+10)))&& (bomber.y >= wall.y1) || (bomber.y <= wall.y2 +5) || (bomber.y >= (wall.y2*2)))){
-        this.touchright = false;
-        }
-        else{
-		this.touchright = true;
-        }
-    
-    
-    if  ((((bomber.x > wall.x1+5) || (bomber.x < wall.x1)) && (bomber.y >= wall.y1) || (bomber.y <= wall.y1 +5) || (bomber.y >= (wall.y1*2))) && (((bomber.x <= wall.x2) || (bomber.x >= (wall.x2+10)))&& (bomber.y >= wall.y1) || (bomber.y <= wall.y2 +5) || (bomber.y >= (wall.y2*2)))){
-        this.touchleft = false;
-        }
-        else{
-		this.touchleft = true;
-        }*/
-
-    
+function handleControls() {
     //control the bomber to move left right up down
-    
-	if (controller.up) {
-		bomber.y -= bomber.speed;
-	} if (controller.down) {
-		bomber.y += bomber.speed;
-	} if (controller.right){
-        bomber.x += bomber.speed;  
-	} if (controller.left) {
-		bomber.x -= bomber.speed;        
-	} 
-	if (bomber.x - bomber.r < 0) {
-		bomber.x = bomber.r;
-	}
-	if (bomber.x + bomber.r > width) {
-		bomber.x = width - bomber.r;
-	}
-	if (bomber.y - bomber.r < 0) {
-		bomber.y = bomber.r;
-	}
-	if (bomber.y + bomber.r > height) {
-		bomber.y = height - bomber.r;
-	}
-    
-//    if(bomber.x == width/2){
-//        bomber.x += 0;
-//    }
+    if (controller.up) {
+        bomber.y -= bomber.speed;
+    }
+    if (controller.down) {
+        bomber.y += bomber.speed;
+    }
+    if (controller.right) {
+        bomber.x += bomber.speed;
+    }
+    if (controller.left) {
+        bomber.x -= bomber.speed;
+    }
+    if (bomber.x - bomber.r < 0) {
+        bomber.x = bomber.r;
+    }
+    if (bomber.x + bomber.r > width) {
+        bomber.x = width - bomber.r;
+    }
+    if (bomber.y - bomber.r < 0) {
+        bomber.y = bomber.r;
+    }
+    if (bomber.y + bomber.r > height) {
+        bomber.y = height - bomber.r;
+    }
 }
 
-function makeVulnerable(){
-	inVulnerable = false;
+function makeVulnerable() {
+    inVulnerable = false;
 }
 
-function resetBomberSpeed(){
+function resetBomberSpeed() {
     makeSlow = false;
     bomber.speed = 7;
 }
 
-function resetBomberSpeedBack(){
+function resetBomberSpeedBack() {
     makeSpeed = false;
     bomber.speed = 7;
 }
 
-document.onkeydown = function(evt){
-	toggleKey(evt.keyCode, true);
+function stopEnemyMovement() {
+    for (var i = 0; i < enemies.length; i++) {
+        makeStop = true;
+        enemies[i].range = 0;
+    }
+}
+
+function resetEnemyMovement() {
+    
+    for (var i = 0; i < enemies.length; i++) {
+        makeStop = false;
+        enemies[i].range = 200;
+    }
+}
+
+function removePower() {
+    powerUps.gone();
+}
+
+function addPower() {
+    powerUps.show();
+}
+document.onkeydown = function (evt) {
+    toggleKey(evt.keyCode, true);
 };
 
-document.onkeyup = function(evt){
-	toggleKey(evt.keyCode, false);
+document.onkeyup = function (evt) {
+    toggleKey(evt.keyCode, false);
 };
 
-function randomBetween(min, max){
-	return Math.floor(Math.random() * (max - min)) + min;
+function randomBetween(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
 //reset the game after player press "ENTER"
-function reset(){
-	bomber = new Bomber();
-	level = 1;
-	inVulnerable = false;
-	bomb;
-	bomb_flag = false;
-	detonated = false;
-	has_exploded = false;
-	gone = false;
-	enemy_count = 2;
+function reset() {
+    bomber = new Bomber();
+    level = 1;
+    inVulnerable = false;
+    bomb;
+    bomb_flag = false;
+    detonated = false;
+    has_exploded = false;
+    gone = false;
+    enemy_count = 2;
     enemy2_count = 0;
-	tmp_count = 4;
-	// console.log(enemy_count);
-	// alert(enemy_count);
-	enemies = [];
-	init_enemies(enemy_count, enemy2_count, level, enemyGif, enemy2Gif);
+    tmp_count = 4;
+    // console.log(enemy_count);
+    // alert(enemy_count);
+    enemies = [];
+    init_enemies(enemy_count, enemy2_count, level, enemyGif, enemy2Gif);
 }
 
-function initClouds(){
-	for (var i = 0; i <  cloud_count; i++) {
-		var cloud = new Cloud();
-		mist.push(cloud);
-	}
+function initClouds() {
+    for (var i = 0; i < cloud_count; i++) {
+        var cloud = new Cloud();
+        mist.push(cloud);
+    }
 }

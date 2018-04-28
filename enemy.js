@@ -1,4 +1,4 @@
-function Enemy(enemyImg,life_allocated,size) {
+function Enemy(enemyImg,life_allocated,size) {    
 	var xPos = window.innerWidth-50;
 	var yPos = window.innerHeight-50;
 	
@@ -49,7 +49,7 @@ function Enemy(enemyImg,life_allocated,size) {
 	this.range = 200; //detect range
     this.life = life_allocated;
     this.afterHit = false;
-    
+    this.makeStop = false;
 
 	this.show = function() {
 		noStroke();
@@ -57,6 +57,10 @@ function Enemy(enemyImg,life_allocated,size) {
             image(enemyImg, this.x-40, this.y-40, this.r*2, this.r*2);
         }else if(size == 65){
             image(enemyImg, this.x-60, this.y-60, this.r*2, this.r*2);
+        }
+        
+        if(makeStop){
+            image(timeStopEffect,this.x-12, this.y-55, 25, 25);
         }
 //		fill('#DF744A');
 //		ellipse(this.x, this.y, this.r, this.r);

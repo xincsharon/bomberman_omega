@@ -5,7 +5,6 @@ function powerUp(powerImg, radius) {
 	this.makeSlow = false;
 	this.r = radius;
     this.angle =0;
-    this.tookDamage = false;
     
     this.show = function(){
         noStroke();
@@ -17,7 +16,7 @@ function powerUp(powerImg, radius) {
 			image(powerImg, this.x-25, this.y-25, this.r+15, this.r+20);
 		}
 //        		fill('#DCB239');
-//		ellipse(this.x, this.y, this.r, this.r); 
+//		ellipse(this.x, this.y, this.r*2, this.r*2); 
     }
     
     // this is to make sure the player can hit the power up by touching it.
@@ -44,4 +43,6 @@ function powerUp(powerImg, radius) {
         
         this.r=0;
     }
+    
+    
 }
