@@ -17,6 +17,9 @@ var pUpExist = true;
 var freezeExist = true;
 var speedUp;
 var speedExist = true;
+var spikeTrap;
+var spikeExist = true;
+var spikeEffect;
 
 var enemies = [];
 var enemy_count = 2;
@@ -119,6 +122,8 @@ function setup() {
     shieldImg= loadImage("res/images/shield_bubble.png", imgLoaded(), ifImgLoadError(), duringloading());
     //load freeze effect image
     freezeEffectImg = loadImage("res/images/freezeEffect.png", imgLoaded(), ifImgLoadError(), duringloading());
+    //load spike trap image
+    var spikeTrapImg = loadImage("res/images/spike_trap.png", imgLoaded(), ifImgLoadError(), duringloading());
     //setup bomberman image    
     //receive and change the selected bomber model
     if(sessionStorage.getItem("selectedBomber") == 'soldier'){
@@ -139,6 +144,8 @@ function setup() {
     freeze = new powerUp(freezeImg, 30);
     //create speedUp power up
     speedUp = new powerUp(speedUpImg,25);
+    //create spike trap
+    spikeTrap = new powerUp(spikeTrapImg, 30);
     
     
     
@@ -150,7 +157,8 @@ function setup() {
     pickUp = loadSound("res/music/pickup.mp3", SELoading(), ifSELoadError(), duringloading());
     //load sound effect for freeze trap
     freezeEffect = loadSound("res/music/freezeEffect.mp3", SELoading(), ifSELoadError(), duringloading());
-    
+    //load sound effect for spike trap
+    spikeEffect = loadSound("res/music/spiketrap_effect.mp3", SELoading(), ifSELoadError(), duringloading());
     
    
     
@@ -159,6 +167,7 @@ function setup() {
     SE.push(forceFieldOn);
     SE.push(pickUp);
     SE.push(freezeEffect);
+    SE.push(spikeEffect);
     
     //add all the gif into the array for checking purpose in draw() function
     gif.push(enemyGif);
@@ -351,7 +360,7 @@ function draw() {
         else {		
             handleControls();
 
-                if(level >= 3){
+                if(level >= 1){
                     // Spawns the trap and show in the game    
                     if(freezeExist){
                         freeze.show();
@@ -366,9 +375,28 @@ function draw() {
                         freeze.gone();
                         freezeExist = false;
                     }
+                    
+                    
+                    // Spawns Spike Trap and show in the game.
+                    if(spikeExist){
+                        spikeTrap.show();
+                    }
+                    
+                    // Check if trap is activated
+                    if (spikeTrap.hits(bomber) && !inVulnerable){
+                        spikeEffect.play();
+                        tookDamage = true;
+                        inVulnerable = true;
+                        setTimeout(makeVulnerable, 2000);
+                        bomber.life-=1;
+                        spikeTrap.gone();
+                        spikeExist = false;
+                    }
+                    
 
-
-                }    
+                }
+            
+                
 
                 //spawn the speed up in game 
                 if(speedExist){
@@ -388,7 +416,8 @@ function draw() {
 
                 // spawns the power up and show in the game
                 if (pUpExist){
-                    powerUps.show();  
+                    powerUps.show();
+                    
                 }   
 
                 // when the player hits the heart, bomber's life will increase by 1, while  at the same time the heart will be gone.
@@ -479,6 +508,12 @@ function draw() {
                                 if(speedExist == false){
                                     speedUp.respawn();
                                     speedExist = true;
+                                }
+                                
+                                if (spikeExist == false){
+                                    spikeTrap.respawn();
+                                    spikeExist = true;
+                                    
                                 }
 
                             setTimeout(init_enemies(enemy_count,enemy2_count,level, enemyGif, enemy2Gif), 3000);

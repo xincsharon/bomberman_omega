@@ -5,6 +5,7 @@ function powerUp(powerImg, radius) {
 	this.makeSlow = false;
 	this.r = radius;
     this.angle =0;
+    this.tookDamage = false;
     
     this.show = function(){
         noStroke();
