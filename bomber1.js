@@ -1,5 +1,5 @@
-function Bomber() {
-	this.x = width/2;
+function Bomber1() {
+	this.x = width/3;
 	this.y = height/2;
 	this.r = 30;
 	this.speed = 7;

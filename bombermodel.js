@@ -22,3 +22,10 @@ function restartGame(){
     window.location.href = "game.html";
     sessionStorage.removeItem("highscore");
 }
+
+//Redirect to game screen
+//Clear highscore in session
+function restartGame2(){
+    window.location.href = "game2.html";
+    sessionStorage.removeItem("highscore");
+}

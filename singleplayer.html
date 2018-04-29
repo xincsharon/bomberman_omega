@@ -19,17 +19,30 @@
 <body class="bck-img">
     <div class="container">
         <h1>Welcome to Bomberman Omega!</h1>
-        <h3><span class="glyphicon glyphicon-chevron-down headerGlyph"></span> Choose your game mode <span class="glyphicon glyphicon-chevron-down headerGlyph"></span></h3>
+        <h3><span class="glyphicon glyphicon-chevron-down headerGlyph"></span> Choose your player model <span class="glyphicon glyphicon-chevron-down headerGlyph"></span></h3>
+
+        <div class="row" id="bombermodelselect">
+            <div class="col-md-4 bomber1">
+                <img id="ghost" src="res/images/bomberman.png" />
+                <span id="selected_1" style="hidden" class="glyphicon glyphicon-ok"></span>
+                <p><button type="button" class="btn btn-default" onclick="selectedBomber('selected_1','ghost')">Ghost</button></p>
+
+            </div>
+            <div class="col-md-4 bomber2">
+                <img src="res/images/bomberman2.png" />
+                <span id="selected_2" style="visibility: hidden" class="glyphicon glyphicon-ok"></span>
+                <p><button type="button" class="btn btn-default" onclick="selectedBomber('selected_2','ninja')">Ninja</button></p>
+            </div>
+            <div class="col-md-4 bomber3">
+                <img src="res/images/bomberman3.png" />
+                <span id="selected_3" style="visibility: hidden" class="glyphicon glyphicon-ok"></span>
+                <p><button type="button" class="btn btn-default" onclick="selectedBomber('selected_3','soldier')">Soldier</button></p>
+            </div>
+        </div>
 
         <div class="row startGame">
             <div class="col-md-12">
-                <button type="button" class="btn btn-primary" onclick="loadSinglePlayer()">Single Player</button>
-            </div>
-        </div>
-        
-        <div class="row startGame">
-            <div class="col-md-12">
-                <button type="button" class="btn btn-primary" onclick="loadMultiPlayer()">Multi Player</button>
+                <button type="button" class="btn btn-primary" onclick="loadSingleGame()">Start Game</button>
             </div>
         </div>
     </div>

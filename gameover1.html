@@ -22,15 +22,13 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h2>Your Highscore</h2>
-                <div id="highscore"></div>
+                <h2 class="winner">Player 2 Win!</h2>
             </div>
         </div>
         
-        
         <div class="row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-primary" onclick="restartGame()">Start Again</button>
+                <button type="button" class="btn btn-primary" onclick="restartGame2()">Start Again</button>
             </div>
         </div>
         
@@ -46,6 +44,7 @@
     var get_highscore = sessionStorage.getItem("highscore");
     console.log(get_highscore);
     document.getElementById("highscore").innerHTML = get_highscore;
+    
 </script>
 </body>
 
