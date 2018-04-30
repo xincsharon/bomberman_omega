@@ -29,6 +29,10 @@ var speedUp;
 var speedUpImg;
 var speedExist = true;
 
+var bombUp;
+var bombUpImg;
+var bombExist = true; 
+
 var timeStop;
 var timeStopImg;
 var timestop_effect;
@@ -130,6 +134,8 @@ function setup() {
     powImg = loadImage("res/images/heartImg.png", imgLoaded(), ifImgLoadError(), duringloading());
     //load speed up power up
     speedUpImg = loadImage("res/images/speed.png", imgLoaded(), ifImgLoadError(), duringloading());
+	//load bomb up power up
+	bombUpImg = loadImage("res/images/bomb.png", imgLoaded(), ifImgLoadError(), duringloading());
     //load spike trap image
     spikeTrapImg = loadImage("res/images/spike_trap.png", imgLoaded(), ifImgLoadError(), duringloading());
     //load Freeze trap image
@@ -164,7 +170,9 @@ function setup() {
     speedUp = new powerUp(speedUpImg, 25);
     //create timeStop power up
     timeStop = new powerUp(timeStopImg, 30);
-
+	//create bombUp power up
+	bombUp = new powerUp(bombUpImg, 40);
+	
     //load background music
     var sound = loadSound("res/music/bomberman.mp3", SELoading(), ifSELoadError(), duringloading());
     //load sound effect for forcefield when player lose one life
@@ -422,6 +430,21 @@ function draw() {
                 speedUp.gone();
                 speedExist = false;
             }
+			
+			if(level >= 3){
+				if(bombExist){
+					bombUp.show();
+				}
+					
+				if(bombUp.hits(bomber) && !inVulnerable){
+					pickUp.play();
+					explosion.fadeout_rate = 100; //bomb fade away speed
+					explosion.expand_rate = 50; 
+					setTimeout(resetBombUp, 10000);
+					bombUp.gone();
+					bombExist = false;
+				}
+			}
 
             // spawns the power up and show in the game
             if (pUpExist) {
@@ -679,6 +702,11 @@ function resetBomberSpeed() {
 function resetBomberSpeedBack() {
     makeSpeed = false;
     bomber.speed = 7;
+}
+
+function resetBombUp(){
+	explosion.fadeout_rate = 20;
+	explosion.expand_rate = 10;
 }
 
 function stopEnemyMovement() {

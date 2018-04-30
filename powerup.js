@@ -14,6 +14,8 @@ function powerUp(powerImg, radius) {
             image(powerImg, this.x-30, this.y-30, this.r*2, this.r*2);
         }else if(this.r == 25){
 			image(powerImg, this.x-25, this.y-25, this.r+15, this.r+20);
+		}else if(this.r == 40){
+			image(powerImg, this.x-40, this.y-40, this.r+10, this.r+10);
 		}
 //        		fill('#DCB239');
 //		ellipse(this.x, this.y, this.r*2, this.r*2); 
