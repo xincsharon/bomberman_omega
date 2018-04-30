@@ -2,8 +2,6 @@ function trap(img,radius) {
 	this.x = Math.floor(Math.random() * width);
 	this.y = Math.floor(Math.random() * height);
     
-	this.makeSlow = false;
-    this.is_Exist = true;
 	this.r = radius;
     this.angle =0;
     

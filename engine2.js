@@ -410,14 +410,37 @@ function draw() {
 
                     if (freezeTraps[i].hits(bomber) && !makeSlow && !inVulnerable) {
                         makeSlow = true;
+                        makeSlow2 = true;
                         freezeEffect.play();
                         bomber.speed = 1;
+                        bomber2.speed = 1;
                         setTimeout(resetBomberSpeed, 1500);
+                        setTimeout(resetBomber2Speed, 1500);
                         freezeTraps.splice(i, 1);
                     }
+                    
                 }
             }
 
+            for (var i = 0; i < freezeTraps.length; i++) {
+                if (level >= 3) {
+                    freezeTraps[i].show();
+
+                    if (freezeTraps[i].hits(bomber2) && !makeSlow2 && !inVulnerable2) {
+                        makeSlow2 = true;
+                        makeSlow = true;
+                        freezeEffect.play();
+                        bomber2.speed = 1;
+                        bomber.speed =1;
+                        setTimeout(resetBomber2Speed, 1500);
+                        setTimeout(resetBomberSpeed, 1500);
+                        freezeTraps.splice(i, 1);
+                    }
+                    
+                }
+            }
+
+            
             //Time stop power up(s) only spawn starting from Lv5
             //Decrease enemy detection range to 0 for 7 seconds.
             if (level >= 5) {
@@ -426,6 +449,14 @@ function draw() {
                 }
 
                 if (timeStop.hits(bomber)) {
+                    timestop_effect.play();
+                    stopEnemyMovement();
+                    setTimeout(resetEnemyMovement, 7000);
+                    timeStop.gone();
+                    timeStopExist = false;
+                }
+                
+                if (timeStop.hits(bomber2)) {
                     timestop_effect.play();
                     stopEnemyMovement();
                     setTimeout(resetEnemyMovement, 7000);
@@ -445,11 +476,26 @@ function draw() {
                         spikeEffect.play();
                         inVulnerable = true;
                         setTimeout(makeVulnerable, 2000);
-                        bomber.life -= 1;
                         spikeTraps.splice(i, 1);
                     }
+                
                 }
             }   
+            
+            for (var i = 0; i < spikeTraps.length; i++) {
+                if (level >= 8) {
+                    spikeTraps[i].show();
+
+                    if (spikeTraps[i].hits(bomber2) && !inVulnerable2) {
+                        spikeEffect.play();
+                        inVulnerable2 = true;
+                        setTimeout(makeVulnerable2, 2000);
+                        spikeTraps.splice(i, 1);
+                    }
+                
+                }
+            }   
+            
 
                 //spawn the speed up in game 
                 if(speedExist){
@@ -470,7 +516,7 @@ function draw() {
                     makeSpeed2 = true;
                     pickUp.play();
                     bomber2.speed = 10;
-                    setTimeout(resetBomberSpeedBack, 5000);
+                    setTimeout(resetBomber2SpeedBack, 5000);
                     speedUp.gone();
                     speedExist = false;
                 }
@@ -570,7 +616,7 @@ function draw() {
 
                             //When hit, add 50 points
 //                            bomber.score += 50;
-                            bomber.life++;
+            
 
 
                             //If enemy is wiped out, then will calculate the next round of enemies
@@ -709,7 +755,7 @@ function draw() {
 
                             //When hit, add 50 points
 //                            bomber2.score += 50;
-                            bomber2.life++;
+
 
 
                             //If enemy is wiped out, then will calculate the next round of enemies

@@ -3,10 +3,10 @@ function Bomber2() {
 	this.y = height/2;
 	this.r = 30;
 	this.speed = 7;
-	this.life = 1;
+	this.life = 5;
 	this.gotHit = false;
 	this.inVulnerable2 = false; //make bomberman invisible for a moment
-    this.makeSlow = false;
+    this.makeSlow2 = false;
 	this.moves = false;
     this.score = 0;
 //    var bomberimage;
@@ -16,7 +16,7 @@ function Bomber2() {
         image(bomberman2Img, this.x-40, this.y-40, 80, 80);
         if(inVulnerable2){
             image(shieldImg, this.x-40, this.y-40, 80, 80);
-        }else if(makeSlow){
+        }else if(makeSlow2){
             image(freezeEffectImg, this.x-40, this.y-40, 80, 80);
         }
 //		fill('#DCB239');
