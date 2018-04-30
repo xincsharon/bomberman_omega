@@ -57,6 +57,11 @@ h3 {
     text-align: center;
 }
 
+.startGame .back-btn{
+    width:50px !important;
+}
+
+
 .startGame div button {
     height: 50px;
     width: 200px;
@@ -93,6 +98,7 @@ h3 {
 #gameover h1{
     font-size: 100px !important;
 }
+
 #highscore {
     color: black;
     font-size: 150px;
