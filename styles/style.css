@@ -36,6 +36,7 @@ h3 {
     background-size: cover;
 }
 
+
 #bombermodelselect div {
     text-align: center;
 }
@@ -77,6 +78,10 @@ h3 {
 
 #gameover {
     font-family: 'Bangers';
+    background:  url(../res/images/celeb.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 #gameover div{
@@ -92,7 +97,7 @@ h3 {
 }
 
 #gameover h1,h2 {
-    color: black !important;    
+    color: white !important;    
 }
 
 #gameover h1{
@@ -100,7 +105,7 @@ h3 {
 }
 
 #highscore {
-    color: black;
+    color: white;
     font-size: 150px;
     text-align: center;
 }

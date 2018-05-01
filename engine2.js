@@ -93,9 +93,14 @@ var gifCount = 0;
 var tempGifCount = 0;
 var imgCount = 0;
 var tempImgCount = 0;
-var numImg = 8;
+var numImg = 11;
 
-
+var pause = false;
+var songPause = false;
+var soundButton;
+var muteButton;
+var sound;
+var explode;
 
 function imgLoaded(){
     imgCount ++;
@@ -175,6 +180,11 @@ function setup() {
 //    }
     bombermanImg = loadImage("res/images/bomberman.png", imgLoaded(), ifImgLoadError(), duringloading());
     bomberman2Img = loadImage("res/images/bomberman2.png", imgLoaded(), ifImgLoadError(), duringloading());
+    
+    soundButton = loadImage("res/images/sound_icon.png", imgLoaded(), ifImgLoadError(), duringloading());
+    muteButton = loadImage("res/images/mute.png", imgLoaded(), ifImgLoadError(), duringloading());
+    
+
        //loading screen background
     loading_screen = loadImage("res/images/bomberman_bg.png");
 
@@ -186,7 +196,7 @@ function setup() {
     timeStop = new powerUp(timeStopImg, 30);
     
     //load background music
-    var sound = loadSound("res/music/bomberman.mp3", SELoading(), ifSELoadError(), duringloading());
+    sound = loadSound("res/music/Light-Years_V001_Looping.mp3", SELoading(), ifSELoadError(), duringloading());
     //load sound effect for forcefield when player lose one life
     forceFieldOn = loadSound("res/music/force_field_on.mp3", SELoading(), ifSELoadError(), duringloading());
     //load sound effect for pick up power up
@@ -197,6 +207,7 @@ function setup() {
     spikeEffect = loadSound("res/music/spiketrap_effect.mp3", SELoading(), ifSELoadError(), duringloading());
     // load sound effect for time stop
     timestop_effect = loadSound("res/music/timestop_effect.mp3", SELoading(), ifSELoadError(), duringloading());
+    explode = loadSound("res/music/explode.mp3", SELoading(), ifSELoadError(),duringloading()); //exploding sound
 
     
    
@@ -206,6 +217,9 @@ function setup() {
     SE.push(forceFieldOn);
     SE.push(pickUp);
     SE.push(freezeEffect);
+    SE.push(spikeEffect);
+    SE.push(timestop_effect);
+    SE.push(explode);
     
     //add all the gif into the array for checking purpose in draw() function
     gif.push(enemyGif);
@@ -308,8 +322,9 @@ function draw() {
         
         textFont("Impact");
 	   fill('#ffffff');
-        textSize(50);
-	   text("Loading... ", width/5 *2, height/2 - 150);
+       textSize(50);
+        textAlign(CENTER);
+	   text("Loading... ", 0,height/3,window.innerWidth, window.innerHeight);
 
         
         stroke(255);
@@ -380,14 +395,26 @@ function draw() {
 //        
 //        text("Player 2 Score: ", 50, 210);
 //        text(bomber2.score, 275, 210);
-
+      
+        
+        if(! sound.isPlaying() && songPause == false){
+            sound.play();
+        }
+        if(songPause){
+            image(muteButton, width - 50, 20,30, 30);
+            console.log("The mutebutton is drawn...");
+        }else{
+            image(soundButton, width - 50, 20,30, 30);
+            console.log("The sound button is drawn...");
+        }
+        
+        console.log("Num of img:" +imgCount);
 
         if (!bomber.moves && !bomber2.moves) {
             fill(255)
             textSize(25);
-            text("Kill an enemy to increase your life", width/2 - 190, height/2 + 220);
-            text("Player 1: W A S D To Move, SPACE Q to plant, E to detonate", width/2 - 280, height/2 + 260);
-            text("Player 2: I J K L To Move, SPACE U to plant, O to detonate", width/2 - 280, height/2 + 300);
+            text("Player 1: W A S D To Move, Q to plant, E to detonate", width/2 - 280, height/2 + 260);
+            text("Player 2: I J K L To Move, U to plant, O to detonate", width/2 - 280, height/2 + 300);
         }
 
         if (bomber.life <= 0) {
@@ -411,7 +438,9 @@ function draw() {
                     if (freezeTraps[i].hits(bomber) && !makeSlow && !inVulnerable) {
                         makeSlow = true;
                         makeSlow2 = true;
-                        freezeEffect.play();
+                        if(!songPause){
+                            freezeEffect.play();
+                        }
                         bomber.speed = 1;
                         bomber2.speed = 1;
                         setTimeout(resetBomberSpeed, 1500);
@@ -429,7 +458,9 @@ function draw() {
                     if (freezeTraps[i].hits(bomber2) && !makeSlow2 && !inVulnerable2) {
                         makeSlow2 = true;
                         makeSlow = true;
-                        freezeEffect.play();
+                        if(!songPause){
+                            freezeEffect.play();
+                        }
                         bomber2.speed = 1;
                         bomber.speed =1;
                         setTimeout(resetBomber2Speed, 1500);
@@ -449,7 +480,9 @@ function draw() {
                 }
 
                 if (timeStop.hits(bomber)) {
-                    timestop_effect.play();
+                    if(!songPause){
+                        timestop_effect.play();
+                    }
                     stopEnemyMovement();
                     setTimeout(resetEnemyMovement, 7000);
                     timeStop.gone();
@@ -457,7 +490,9 @@ function draw() {
                 }
                 
                 if (timeStop.hits(bomber2)) {
-                    timestop_effect.play();
+                    if(!songPause){
+                        timestop_effect.play();
+                    }
                     stopEnemyMovement();
                     setTimeout(resetEnemyMovement, 7000);
                     timeStop.gone();
@@ -473,7 +508,9 @@ function draw() {
                     spikeTraps[i].show();
 
                     if (spikeTraps[i].hits(bomber) && !inVulnerable) {
-                        spikeEffect.play();
+                        if(!songPause){
+                            spikeEffect.play();
+                        }
                         inVulnerable = true;
                         setTimeout(makeVulnerable, 2000);
                         spikeTraps.splice(i, 1);
@@ -487,7 +524,9 @@ function draw() {
                     spikeTraps[i].show();
 
                     if (spikeTraps[i].hits(bomber2) && !inVulnerable2) {
-                        spikeEffect.play();
+                        if(!songPause){
+                            spikeEffect.play();
+                        }
                         inVulnerable2 = true;
                         setTimeout(makeVulnerable2, 2000);
                         spikeTraps.splice(i, 1);
@@ -505,7 +544,9 @@ function draw() {
                 //increase bomber speed after they have hit the power up, then it will gone after 
                 if(speedUp.hits(bomber) && !inVulnerable && !makeSlow){
                     makeSpeed = true;
-                    pickUp.play();
+                    if(!songPause){
+                        pickUp.play();
+                    }
                     bomber.speed = 10;
                     setTimeout(resetBomberSpeedBack, 5000);
                     speedUp.gone();
@@ -514,7 +555,9 @@ function draw() {
             
                 if(speedUp.hits(bomber2) && !inVulnerable2 && !makeSlow2){
                     makeSpeed2 = true;
-                    pickUp.play();
+                    if(!songPause){
+                        pickUp.play();
+                    }
                     bomber2.speed = 10;
                     setTimeout(resetBomber2SpeedBack, 5000);
                     speedUp.gone();
@@ -529,14 +572,18 @@ function draw() {
 
                 // when the player hits the heart, bomber's life will increase by 1, while  at the same time the heart will be gone.
                 if (powerUps.hits(bomber)){ 
-                    pickUp.play();
+                    if(!songPause){
+                        pickUp.play();
+                    }
                     bomber.life+=1;
                     powerUps.gone();
                     pUpExist = false;
                 }
             
                 if (powerUps.hits(bomber2)){ 
-                    pickUp.play();
+                    if(!songPause){
+                        pickUp.play();
+                    }
                     bomber2.life+=1;
                     powerUps.gone();
                     pUpExist = false;
@@ -557,7 +604,9 @@ function draw() {
                     //after damaging bomberman, he will turn into inVulnerable
                     inVulnerable = true;
                     //force field will be up, this is to indicate player force field is up and player loses one live
-                    forceFieldOn.play();
+                    if(! songPause){
+                        forceFieldOn.play();
+                    }
                     //bomberman is inVulnerable for 2seconds
                     setTimeout(makeVulnerable, 2000);
                     //bomber.r += 20;  //increase the size of bomber radius
@@ -568,7 +617,9 @@ function draw() {
                     //after damaging bomberman, he will turn into inVulnerable
                     inVulnerable2 = true;
                     //force field will be up, this is to indicate player force field is up and player loses one live
-                    forceFieldOn.play();
+                     if(!songPause){
+                        forceFieldOn.play();
+                     }
                     //bomberman is inVulnerable for 2seconds
                     setTimeout(makeVulnerable2, 2000);
                     //bomber.r += 20;  //increase the size of bomber radius
@@ -582,7 +633,9 @@ function draw() {
                 if (detonated && explosion.hits(bomber) && !inVulnerable) {
                     inVulnerable = true;
                     //force field will be up, this is to indicate player force field is up and player loses one live
+                    if(!songPause){
                     forceFieldOn.play();
+                    }
                     setTimeout(makeVulnerable, 5000);
                     //bomber.r += 20; //increase bomber size
                     bomber.life--;
@@ -721,7 +774,9 @@ function draw() {
                 if (detonated2 && explosion2.hits(bomber2) && !inVulnerable2) {
                     inVulnerable2 = true;
                     //force field will be up, this is to indicate player force field is up and player loses one live
-                    forceFieldOn.play();
+                    if(!songPause){
+                        forceFieldOn.play();
+                    }
                     setTimeout(makeVulnerable2, 5000);
                     //bomber.r += 20; //increase bomber size
                     bomber2.life--;
@@ -860,6 +915,13 @@ function draw() {
                 c.show();
                 c.move(level * .5);
             }
+            
+            if(pause){
+               textSize(100);
+                fill("#ffffff");
+                textAlign(CENTER,CENTER);
+                text("PAUSED \nPress ENTER to continue...",0,0, window.innerWidth, window.innerHeight); 
+            }
         }
     }
 }
@@ -920,8 +982,9 @@ function toggleKey(keyCode, isPressed){
 		console.log("explodes!");
 		// console.log(explode);
 		// sound.play();
-		var explode = new Audio("res/music/explode.mp3"); //exploding sound
-	   explode.play(); //play the sound 
+        if(!songPause){
+	       explode.play(); //play the sound 
+        }
 	
 		detonated = true;
 		explosion = new Explosion(bomb.x, bomb.y);			
@@ -945,80 +1008,69 @@ function toggleKey(keyCode, isPressed){
 		reset();
 		draw();
 	}
+    //if p is pressed
+    if (keyCode == 80) {
+        pause = true;
+	}
+    //if pausing screen is on and enter is pressed
+    if (keyCode == ENTER && pause){
+        pause = false;
+    }
 }
 
 
 
 function handleControls(){
-     
-    //detect when the bomber touch the wall
-    /*var touchright = false;
-    var touchleft = false;
-    
-    if ((((bomber.x <= wall.x1) || (bomber.x >= (wall.x1+5))) && (bomber.y >= wall.y1) || (bomber.y <= wall.y1 +5) || (bomber.y >= (wall.y1*2))) && (((bomber.x <= wall.x2) || (bomber.x >= (wall.x2+10)))&& (bomber.y >= wall.y1) || (bomber.y <= wall.y2 +5) || (bomber.y >= (wall.y2*2)))){
-        this.touchright = false;
-        }
-        else{
-		this.touchright = true;
-        }
-    
-    
-    if  ((((bomber.x > wall.x1+5) || (bomber.x < wall.x1)) && (bomber.y >= wall.y1) || (bomber.y <= wall.y1 +5) || (bomber.y >= (wall.y1*2))) && (((bomber.x <= wall.x2) || (bomber.x >= (wall.x2+10)))&& (bomber.y >= wall.y1) || (bomber.y <= wall.y2 +5) || (bomber.y >= (wall.y2*2)))){
-        this.touchleft = false;
-        }
-        else{
-		this.touchleft = true;
-        }*/
-
     
     //control bomber to move left right up down
-    
-	if (controller.w) {
-		bomber.y -= bomber.speed;
-	} if (controller.s) {
-		bomber.y += bomber.speed;
-	} if (controller.d){
-        bomber.x += bomber.speed;  
-	} if (controller.a) {
-		bomber.x -= bomber.speed;        
-	} 
-	if (bomber.x - bomber.r < 0) {
-		bomber.x = bomber.r;
-	}
-	if (bomber.x + bomber.r > width) {
-		bomber.x = width - bomber.r;
-	}
-	if (bomber.y - bomber.r < 0) {
-		bomber.y = bomber.r;
-	}
-	if (bomber.y + bomber.r > height) {
-		bomber.y = height - bomber.r;
-	}
-    
-    //control the bomber2 to move left right up down
-    
-	if (controller.i) {
-		bomber2.y -= bomber2.speed;
-	} if (controller.k) {
-		bomber2.y += bomber2.speed;
-	} if (controller.l){
-        bomber2.x += bomber2.speed;  
-	} if (controller.j) {
-		bomber2.x -= bomber2.speed;        
-	} 
-	if (bomber2.x - bomber2.r < 0) {
-		bomber2.x = bomber2.r;
-	}
-	if (bomber2.x + bomber2.r > width) {
-		bomber2.x = width - bomber2.r;
-	}
-	if (bomber2.y - bomber2.r < 0) {
-		bomber2.y = bomber2.r;
-	}
-	if (bomber2.y + bomber2.r > height) {
-		bomber2.y = height - bomber2.r;
-	}
-    
+    if(!pause){
+        if (controller.w) {
+            bomber.y -= bomber.speed;
+        } if (controller.s) {
+            bomber.y += bomber.speed;
+        } if (controller.d){
+            bomber.x += bomber.speed;  
+        } if (controller.a) {
+            bomber.x -= bomber.speed;        
+        } 
+        if (bomber.x - bomber.r < 0) {
+            bomber.x = bomber.r;
+        }
+        if (bomber.x + bomber.r > width) {
+            bomber.x = width - bomber.r;
+        }
+        if (bomber.y - bomber.r < 0) {
+            bomber.y = bomber.r;
+        }
+        if (bomber.y + bomber.r > height) {
+            bomber.y = height - bomber.r;
+        }
+
+        //control the bomber2 to move left right up down
+
+        if (controller.i) {
+            bomber2.y -= bomber2.speed;
+        } if (controller.k) {
+            bomber2.y += bomber2.speed;
+        } if (controller.l){
+            bomber2.x += bomber2.speed;  
+        } if (controller.j) {
+            bomber2.x -= bomber2.speed;        
+        } 
+        if (bomber2.x - bomber2.r < 0) {
+            bomber2.x = bomber2.r;
+        }
+        if (bomber2.x + bomber2.r > width) {
+            bomber2.x = width - bomber2.r;
+        }
+        if (bomber2.y - bomber2.r < 0) {
+            bomber2.y = bomber2.r;
+        }
+        if (bomber2.y + bomber2.r > height) {
+            bomber2.y = height - bomber2.r;
+        }
+    }
+
  
     
 //    if(bomber.x == width/2){
@@ -1026,6 +1078,16 @@ function handleControls(){
 //    }
 }
 
+function mousePressed(){
+    if((mouseX <= (width-20) && mouseX >= (width - 50)) &&(mouseY <= 50 && mouseY >= 0)){
+        if(songPause == false){
+            sound.pause();
+            songPause = true;
+        }else{
+            songPause = false;
+        }
+    }
+}
 function makeVulnerable(){
 	inVulnerable = false;
 }

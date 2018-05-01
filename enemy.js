@@ -79,10 +79,12 @@ function Enemy(enemyImg,life_allocated,size) {
 		var dirx = (Math.cos(this.angle * (Math.PI/180))*this.speed);
 		var diry = (Math.sin(this.angle * (Math.PI/180))*this.speed);
 		
-		//let the enemy move and chase after bomber 
-		this.x += this.range >= hyp ? dirx : randomBetween(-2, 3);
-		this.y += this.range >= hyp ? diry : randomBetween(-2, 3);
-
+        if(!pause){
+            //let the enemy move and chase after bomber 
+            this.x += this.range >= hyp ? dirx : randomBetween(-2, 3);
+            this.y += this.range >= hyp ? diry : randomBetween(-2, 3);
+        }
+        
 		if (this.x - this.r < 0) {
 			this.x = this.r;
 		}
