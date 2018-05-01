@@ -167,9 +167,11 @@ function setup() {
         bombermanImg = loadImage("res/images/bomberman.png", imgLoaded(), ifImgLoadError(), duringloading());
     }
     
+    //load the image for sound button
     soundButton = loadImage("res/images/sound_icon.png");
+    //load the image for mute button
     muteButton = loadImage("res/images/mute.png");
-    nextSongButton = loadImage("res/images/");
+    
     
 
     //loading screen background
@@ -660,6 +662,7 @@ function draw() {
                 c.show();
                 c.move(level * .5);
             }
+            //draw pause screen and prompt user to press ENTER to continue the game
             if(pause){
                textSize(100);
 //                textFont("Impact");

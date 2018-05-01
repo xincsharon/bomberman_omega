@@ -93,7 +93,7 @@ var gifCount = 0;
 var tempGifCount = 0;
 var imgCount = 0;
 var tempImgCount = 0;
-var numImg = 11;
+var numImg = 13;
 
 var pause = false;
 var songPause = false;
@@ -181,7 +181,9 @@ function setup() {
     bombermanImg = loadImage("res/images/bomberman.png", imgLoaded(), ifImgLoadError(), duringloading());
     bomberman2Img = loadImage("res/images/bomberman2.png", imgLoaded(), ifImgLoadError(), duringloading());
     
+    //load the image for the sound button
     soundButton = loadImage("res/images/sound_icon.png", imgLoaded(), ifImgLoadError(), duringloading());
+    //load the image for the mute button
     muteButton = loadImage("res/images/mute.png", imgLoaded(), ifImgLoadError(), duringloading());
     
 
